@@ -1,7 +1,32 @@
 [
-  { "id": "RESOLVED_CA", "status": "resolved", "title": "Résolu par le chargé d'affaires" },
-  { "id": "TRANSFER_TECH", "status": "technical_transfer", "title": "Transmission Service Technique" },
-  { "id": "WAITING_ELEMENTS", "status": "waiting", "title": "En attente d'éléments client" },
-  { "id": "REINTERVENTION_PRO", "status": "professional_reintervention", "title": "Réintervention professionnel" },
-  { "id": "INFO_ONLY", "status": "information", "title": "Information fournie" }
+  {
+    "id": "RESOLVED_CA",
+    "status": "resolved",
+    "title": "Résolu par le chargé d'affaires"
+  },
+  {
+    "id": "TRANSFER_TECH",
+    "status": "technical_transfer",
+    "title": "Transmission Service Technique"
+  },
+  {
+    "id": "WAITING_ELEMENTS",
+    "status": "waiting",
+    "title": "En attente d'éléments client"
+  },
+  {
+    "id": "REINTERVENTION_PRO",
+    "status": "professional_reintervention",
+    "title": "Réintervention professionnel"
+  },
+  {
+    "id": "INFO_ONLY",
+    "status": "information",
+    "title": "Information fournie"
+  },
+  {
+    "id": "ENERGY_SUPPLIER",
+    "status": "energy_supplier",
+    "title": "Orientation fournisseur d'énergie"
+  }
 ]
