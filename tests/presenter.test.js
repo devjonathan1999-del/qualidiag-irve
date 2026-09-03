@@ -31,3 +31,22 @@ test('présente une conclusion avec résumé Salesforce', () => {
   assert.equal(vm.title, 'Transmission Service Technique');
   assert.match(vm.summary, /Conclusion : Transmission Service Technique/);
 });
+
+test('résout un texte métier selon une valeur du contexte', () => {
+  const dynamicNode = {
+    id: 'Q-AGCP',
+    type: 'question',
+    title: 'Le calibre de l’AGCP est-il cohérent ?',
+    bodyByContext: {
+      key: 'installation.power',
+      values: {
+        '9 kVA': 'Calibre attendu : 45 A',
+        '12 kVA': 'Calibre attendu : 60 A'
+      },
+      fallback: 'Vérifier le calibre attendu selon l’abonnement.'
+    },
+    answers: []
+  };
+  const vm = toViewModel(dynamicNode, { ...session, context: { ...session.context, 'installation.power': '9 kVA' } }, {});
+  assert.equal(vm.body, 'Calibre attendu : 45 A');
+});
