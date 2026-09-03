@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+const mainPath = fileURLToPath(new URL('../app/main.js', import.meta.url));
+
+test('le module principal a une syntaxe JavaScript valide', () => {
+  const result = spawnSync(process.execPath, ['--check', mainPath], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+});
