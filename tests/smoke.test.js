@@ -10,3 +10,10 @@ test('index charge le CSS et le module principal', async () => {
   assert.match(html, /app\/main\.js/);
   assert.match(html, /id="app"/);
 });
+
+test('prévoit un écran sûr pour les parcours incomplets', async () => {
+  const ui = await readFile(new URL('app/ui.js', root), 'utf8');
+  const main = await readFile(new URL('app/main.js', root), 'utf8');
+  assert.match(ui, /Parcours incomplet — transmettre au Service Technique/);
+  assert.match(main, /GraphError/);
+});
