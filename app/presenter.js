@@ -8,11 +8,17 @@ function contextView(context = {}) {
   };
 }
 
+function resolveBody(node, context = {}) {
+  if (!node.bodyByContext) return node.body ?? '';
+  const { key, values = {}, fallback = '' } = node.bodyByContext;
+  return values[context[key]] ?? fallback;
+}
+
 export function toViewModel(node, session, data) {
   const common = {
     id: node.id,
     title: node.title ?? '',
-    body: node.body ?? '',
+    body: resolveBody(node, session?.context),
     canGoBack: (session?.history?.length ?? 0) > 0,
     context: contextView(session?.context)
   };
