@@ -12,6 +12,7 @@ const DATA_FILES = {
   brands: 'brands.json',
   models: 'models.json',
   nodes: NODE_FILES,
+  powerPolicy: 'power-policy.json',
   procedures: 'procedures.json',
   conclusions: 'conclusions.json',
   resources: 'resources.json'
@@ -23,6 +24,52 @@ async function fetchJson(file, base) {
   return response.json();
 }
 
+export function applyPowerPolicy(nodes = [], policy = {}) {
+  const output = nodes.map(node => ({
+    ...node,
+    answers: Array.isArray(node.answers) ? node.answers.map(answer => ({ ...answer })) : node.answers
+  }));
+  const byId = new Map(output.map(node => [node.id, node]));
+  const existingIds = new Set(byId.keys());
+  const alerts = [];
+
+  for (const group of Object.values(policy ?? {})) {
+    const node = byId.get(group?.nodeId);
+    if (!node || !Array.isArray(node.answers)) continue;
+
+    const allowed = new Set(group.allowed ?? []);
+    const warnings = group.warnings ?? {};
+    node.answers = node.answers
+      .filter(answer => allowed.has(answer.id))
+      .map(answer => {
+        const warning = warnings[answer.id];
+        if (!warning?.nodeId) return answer;
+
+        if (!existingIds.has(warning.nodeId)) {
+          alerts.push({
+            id: warning.nodeId,
+            type: 'action',
+            title: warning.title ?? '⚠️ Alerte puissance',
+            body: warning.body ?? '',
+            source: 'Validation métier',
+            validation: 'valide',
+            answers: [{
+              id: 'continue',
+              label: 'J’ai vérifié, continuer',
+              next: answer.next,
+              check: warning.check
+            }]
+          });
+          existingIds.add(warning.nodeId);
+        }
+
+        return { ...answer, next: warning.nodeId };
+      });
+  }
+
+  return [...output, ...alerts];
+}
+
 export async function loadData(baseUrl = '../data/') {
   const base = baseUrl instanceof URL ? baseUrl : new URL(baseUrl, import.meta.url);
   const entries = await Promise.all(Object.entries(DATA_FILES).map(async ([key, file]) => {
@@ -32,7 +79,9 @@ export async function loadData(baseUrl = '../data/') {
     }
     return [key, await fetchJson(file, base)];
   }));
-  return Object.fromEntries(entries);
+  const data = Object.fromEntries(entries);
+  data.nodes = applyPowerPolicy(data.nodes, data.powerPolicy);
+  return data;
 }
 
 export function validateData(data) {
