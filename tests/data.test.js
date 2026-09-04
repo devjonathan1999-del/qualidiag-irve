@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { validateData } from '../app/data.js';
+import { validateData, NODE_FILES } from '../app/data.js';
 
 const valid = {
   brands: [{ id: 'schneider', label: 'Schneider Charge', pilot: true }],
@@ -35,11 +35,13 @@ test('détecte une conclusion inconnue, un type invalide et une marque modèle i
   assert.match(errors, /unknown-brand/);
 });
 
-test('les vrais fichiers JSON du pilote sont cohérents', async () => {
+test('les vrais fichiers JSON du Forms complet sont cohérents', async () => {
   const base = new URL('../data/', import.meta.url);
-  const [brands, models, nodes, procedures, conclusions, resources] = await Promise.all(
-    ['brands.json', 'models.json', 'diagnostics.json', 'procedures.json', 'conclusions.json', 'resources.json']
-      .map(async file => JSON.parse(await readFile(new URL(file, base), 'utf8')))
-  );
+  const [brands, models, procedures, conclusions, resources, chunks] = await Promise.all([
+    ...['brands.json', 'models.json', 'procedures.json', 'conclusions.json', 'resources.json']
+      .map(async file => JSON.parse(await readFile(new URL(file, base), 'utf8'))),
+    Promise.all(NODE_FILES.map(async file => JSON.parse(await readFile(new URL(file, base), 'utf8'))))
+  ]);
+  const nodes = chunks.flat();
   assert.deepEqual(validateData({ brands, models, nodes, procedures, conclusions, resources }), []);
 });
