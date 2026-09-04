@@ -73,7 +73,7 @@ export function applyPowerPolicy(nodes = [], policy = {}) {
 
 export function applySchneiderChargePolicy(nodes = [], policy = {}) {
   const overrides = policy?.nodes ?? {};
-  return nodes.map(node => {
+  const output = nodes.map(node => {
     const override = overrides[node.id];
     if (!override) return node;
     return {
@@ -84,6 +84,16 @@ export function applySchneiderChargePolicy(nodes = [], policy = {}) {
         : node.answers
     };
   });
+
+  const existingIds = new Set(output.map(node => node.id));
+  const additions = (policy?.addNodes ?? [])
+    .filter(node => node?.id && !existingIds.has(node.id))
+    .map(node => ({
+      ...node,
+      answers: Array.isArray(node.answers) ? node.answers.map(answer => ({ ...answer })) : node.answers
+    }));
+
+  return [...output, ...additions];
 }
 
 export async function loadData(baseUrl = '../data/') {

@@ -54,6 +54,85 @@
           "check": "AGCP mal calibré — orientation fournisseur d’énergie"
         }
       ]
+    },
+    "F-090": {
+      "type": "question",
+      "title": "LED rouge fixe",
+      "body": "Demandez au client de débrancher puis de réinsérer le câble côté borne en appuyant fermement jusqu’en butée, puis de refaire un essai de charge.",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "resolved",
+          "label": "La LED rouge a disparu",
+          "next": "END-RESOLVED",
+          "check": "LED rouge fixe — défaut disparu après réinsertion ferme du câble côté borne"
+        },
+        {
+          "id": "still-red",
+          "label": "La LED rouge reste fixe",
+          "next": "SC-RED-RESTART",
+          "check": "LED rouge fixe — défaut persistant après réinsertion ferme du câble"
+        }
+      ]
     }
-  }
+  },
+  "addNodes": [
+    {
+      "id": "SC-RED-RESTART",
+      "type": "question",
+      "title": "Redémarrer la borne",
+      "body": "Demandez au client de redémarrer la borne, puis de refaire un essai.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "resolved",
+          "label": "Le défaut a disparu",
+          "next": "END-RESOLVED",
+          "check": "LED rouge fixe — défaut disparu après redémarrage"
+        },
+        {
+          "id": "still-red",
+          "label": "Le défaut revient",
+          "next": "SC-RED-CONTEXT",
+          "check": "LED rouge fixe — défaut persistant après redémarrage"
+        }
+      ]
+    },
+    {
+      "id": "SC-RED-CONTEXT",
+      "type": "question",
+      "title": "Quand le défaut apparaît-il ?",
+      "body": "Sélectionnez simplement le contexte d’apparition avant de transmettre au Service Technique.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "plug",
+          "label": "Dès le branchement du câble",
+          "next": "END-TRANSFER",
+          "check": "LED rouge fixe — apparaît dès le branchement du câble"
+        },
+        {
+          "id": "start",
+          "label": "Au lancement de la charge",
+          "next": "END-TRANSFER",
+          "check": "LED rouge fixe — apparaît au lancement de la charge"
+        },
+        {
+          "id": "during",
+          "label": "Pendant la charge",
+          "next": "END-TRANSFER",
+          "check": "LED rouge fixe — apparaît pendant la charge"
+        },
+        {
+          "id": "random",
+          "label": "Aléatoirement",
+          "next": "END-TRANSFER",
+          "check": "LED rouge fixe — apparaît aléatoirement"
+        }
+      ]
+    }
+  ]
 }
