@@ -41,6 +41,10 @@ export function toViewModel(node, session, data) {
   return {
     ...common,
     kind: node.type === 'action' ? 'action' : 'question',
-    answers: (node.answers ?? []).map(answer => ({ id: answer.id, label: answer.label }))
+    answers: (node.answers ?? []).map(answer => ({
+      id: answer.id,
+      label: answer.label,
+      disabled: Boolean(answer.disabled)
+    }))
   };
 }
