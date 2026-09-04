@@ -43,10 +43,10 @@ function renderCurrent() {
     const node = getNode(graph, session.currentNodeId);
     const viewModel = toViewModel(node, session, data);
     render(root, viewModel, {
-      onAnswer(answerId) {
+      onAnswer(answerId, fieldSet = {}) {
         try {
           const result = resolveAnswer(graph, session.currentNodeId, answerId);
-          session = recordAnswer(session, result.node, result.answer);
+          session = recordAnswer(session, result.node, result.answer, fieldSet);
           saveDraft(localStorage, session);
           renderCurrent();
         } catch (error) {
