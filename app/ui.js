@@ -13,8 +13,11 @@ function contextMarkup(context = {}) {
   return `<div class="context" aria-label="Contexte du diagnostic">${items.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div>`;
 }
 
-function answerButtons(answers = []) {
-  return answers.map(answer => `<button class="answer" type="button" data-answer="${escapeHtml(answer.id)}">${escapeHtml(answer.label)}</button>`).join('');
+export function answerButtons(answers = []) {
+  return answers.map(answer => {
+    const disabled = answer.disabled ? ' disabled aria-disabled="true"' : '';
+    return `<button class="answer" type="button" data-answer="${escapeHtml(answer.id)}"${disabled}>${escapeHtml(answer.label)}</button>`;
+  }).join('');
 }
 
 function shell(content) {
