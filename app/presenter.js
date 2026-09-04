@@ -1,5 +1,15 @@
 import { buildSalesforceSummary } from './summary.js';
 
+const INPUTS_BY_NODE = {
+  'A-AC-NONCONFORME': {
+    type: 'textarea',
+    key: 'autocontrol.nonConformity',
+    label: 'Motif de non-conformité',
+    placeholder: 'Décrivez la non-conformité constatée…',
+    required: true
+  }
+};
+
 function contextView(context = {}) {
   return {
     brand: context.brand ?? null,
@@ -14,11 +24,21 @@ function resolveBody(node, context = {}) {
   return values[context[key]] ?? fallback;
 }
 
+function resolveInput(node, context = {}) {
+  const input = node.input ?? INPUTS_BY_NODE[node.id];
+  if (!input) return null;
+  return {
+    ...input,
+    value: context[input.key] ?? ''
+  };
+}
+
 export function toViewModel(node, session, data) {
   const common = {
     id: node.id,
     title: node.title ?? '',
     body: resolveBody(node, session?.context),
+    input: resolveInput(node, session?.context),
     canGoBack: (session?.history?.length ?? 0) > 0,
     context: contextView(session?.context)
   };
