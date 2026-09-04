@@ -15,6 +15,7 @@ test('Schneider LED bleue clignotante reste sur une seule question de programmat
 
   assert.equal(blue.title, 'LED bleue clignotante');
   assert.match(blue.body, /charge.*programmée/i);
+  assert.match(blue.body, /véhicule|Smartcharge|Wiser/i);
   assert.doesNotMatch(blue.body, /puiss app soutir/i);
   assert.doesNotMatch(blue.body, /bouton \+/i);
   assert.deepEqual(blue.answers.map(answer => answer.id), ['scheduled', 'not-scheduled']);
