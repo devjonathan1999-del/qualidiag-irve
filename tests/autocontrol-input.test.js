@@ -5,36 +5,29 @@ import { toViewModel } from '../app/presenter.js';
 import { createSession, recordAnswer } from '../app/session.js';
 import { buildSalesforceSummary } from '../app/summary.js';
 
-async function loadCommon() {
-  return JSON.parse(await readFile(new URL('../data/diagnostics/common.json', import.meta.url), 'utf8'));
-}
-
-test('la non-conformité AC expose un champ multiligne obligatoire', async () => {
-  const nodes = await loadCommon();
-  const node = nodes.find(item => item.id === 'A-AC-NONCONFORME');
-  assert.equal(node.input.type, 'textarea');
-  assert.equal(node.input.key, 'autocontrol.nonConformity');
-  assert.equal(node.input.required, true);
-});
-
-test('le presenter expose le champ de saisie avec sa valeur existante', () => {
+test('la non-conformité AC expose un champ multiligne obligatoire', () => {
   const node = {
     id: 'A-AC-NONCONFORME',
     type: 'action',
     title: 'Préciser la non-conformité',
-    input: {
-      type: 'textarea',
-      key: 'autocontrol.nonConformity',
-      label: 'Motif de non-conformité',
-      required: true
-    },
+    answers: [{ id: 'continue', label: 'Continuer', next: 'NEXT' }]
+  };
+  const vm = toViewModel(node, { context: {}, history: [] }, {});
+  assert.equal(vm.input.type, 'textarea');
+  assert.equal(vm.input.key, 'autocontrol.nonConformity');
+  assert.equal(vm.input.required, true);
+});
+
+test('le presenter restaure la valeur déjà saisie', () => {
+  const node = {
+    id: 'A-AC-NONCONFORME',
+    type: 'action',
+    title: 'Préciser la non-conformité',
     answers: [{ id: 'continue', label: 'Continuer', next: 'NEXT' }]
   };
   const session = { context: { 'autocontrol.nonConformity': 'Terre non conforme' }, history: [] };
   const vm = toViewModel(node, session, {});
-  assert.equal(vm.input.key, 'autocontrol.nonConformity');
   assert.equal(vm.input.value, 'Terre non conforme');
-  assert.equal(vm.input.required, true);
 });
 
 test('recordAnswer conserve la saisie dans le contexte de qualification', () => {
