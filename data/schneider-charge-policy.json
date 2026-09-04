@@ -55,6 +55,27 @@
         }
       ]
     },
+    "F-089": {
+      "type": "question",
+      "title": "LED bleue clignotante",
+      "body": "Une charge est-elle programmée côté véhicule ou via Smartcharge / Wiser ?",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "scheduled",
+          "label": "Oui, via le véhicule / Smartcharge / Wiser",
+          "next": "END-RESOLVED",
+          "check": "LED bleue clignotante — charge programmée, comportement expliqué"
+        },
+        {
+          "id": "not-scheduled",
+          "label": "Non, aucune charge programmée",
+          "next": "END-TRANSFER",
+          "check": "LED bleue clignotante — aucune programmation, transmission Service Technique"
+        }
+      ]
+    },
     "F-090": {
       "type": "question",
       "title": "LED rouge fixe",
