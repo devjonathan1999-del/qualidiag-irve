@@ -1,0 +1,59 @@
+{
+  "nodes": {
+    "F-084": {
+      "title": "Quel appareil déclenche ?",
+      "body": "Sélectionnez simplement l'appareil qui déclenche.",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "linky",
+          "label": "Compteur Linky",
+          "next": "END-TRANSFER",
+          "check": "Installation disjoncte — Compteur Linky"
+        },
+        {
+          "id": "agcp",
+          "label": "AGCP",
+          "next": "F-085",
+          "check": "Installation disjoncte — AGCP"
+        }
+      ]
+    },
+    "F-085": {
+      "title": "Le calibre de l’AGCP est-il correct ?",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "bodyByContext": {
+        "keys": ["installation.phase", "installation.power"],
+        "separator": "|",
+        "values": {
+          "Monophasée|6 kVA": "Abonnement 6 kVA monophasé : calibre attendu 30 A.",
+          "Monophasée|9 kVA": "Abonnement 9 kVA monophasé : calibre attendu 45 A.",
+          "Monophasée|12 kVA": "Abonnement 12 kVA monophasé : calibre attendu 60 A.",
+          "Triphasée|12 kVA": "Abonnement 12 kVA triphasé : calibre attendu 20 A.",
+          "Triphasée|15 kVA": "Abonnement 15 kVA triphasé : calibre attendu 25 A.",
+          "Triphasée|18 kVA": "Abonnement 18 kVA triphasé : calibre attendu 30 A.",
+          "Triphasée|24 kVA": "Abonnement 24 kVA triphasé : calibre attendu 40 A.",
+          "Triphasée|30 kVA": "Abonnement 30 kVA triphasé : calibre attendu 50 A.",
+          "Triphasée|36 kVA": "Abonnement 36 kVA triphasé : calibre attendu 60 A."
+        },
+        "fallback": "Vérifiez que le calibre de l’AGCP correspond à la puissance d’abonnement souscrite."
+      },
+      "answers": [
+        {
+          "id": "oui",
+          "label": "Oui, calibre correct",
+          "next": "END-TRANSFER",
+          "check": "AGCP correctement calibré"
+        },
+        {
+          "id": "non",
+          "label": "Non, calibre incorrect",
+          "next": "END-ENERGY-SUPPLIER",
+          "check": "AGCP mal calibré — orientation fournisseur d’énergie"
+        }
+      ]
+    }
+  }
+}
