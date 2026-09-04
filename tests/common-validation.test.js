@@ -16,8 +16,8 @@ test('le tronc commun ne demande aucune identité client', async () => {
 test('propose les puissances d’abonnement par type d’installation', async () => {
   const nodes = await loadCommon();
   const byId = new Map(nodes.map(node => [node.id, node]));
-  assert.deepEqual(byId.get('Q-POWER-MONO').answers.map(answer => answer.label), ['9 kVA', '12 kVA', 'Autre / à préciser']);
-  assert.deepEqual(byId.get('Q-POWER-TRI').answers.map(answer => answer.label), ['15 kVA', '18 kVA', '24 kVA', '36 kVA', 'Autre / à préciser']);
+  assert.deepEqual(byId.get('Q-POWER-MONO').answers.map(answer => answer.label), ['3 kVA', '6 kVA', '9 kVA', '12 kVA', 'Autre / à préciser']);
+  assert.deepEqual(byId.get('Q-POWER-TRI').answers.map(answer => answer.label), ['6 kVA', '9 kVA', '12 kVA', '15 kVA', '18 kVA', '24 kVA', '30 kVA', '36 kVA', 'Autre / à préciser']);
 });
 
 test('désactive la recherche d’information en attendant son futur parcours', async () => {
