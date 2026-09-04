@@ -96,6 +96,27 @@
           "check": "LED rouge fixe — défaut persistant après réinsertion ferme du câble"
         }
       ]
+    },
+    "F-091": {
+      "type": "question",
+      "title": "LED orange clignotante",
+      "body": "La borne est-elle indiquée connectée à Internet dans l’autocontrôle ?",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "connected",
+          "label": "Oui, la borne est indiquée connectée",
+          "next": "SC-ORANGE-SUPERVISION",
+          "check": "LED orange clignotante — borne indiquée connectée dans l’autocontrôle"
+        },
+        {
+          "id": "not-connected",
+          "label": "Non, la borne n’est pas indiquée connectée",
+          "next": "SC-ORANGE-NOT-CONNECTED",
+          "check": "LED orange clignotante — borne non connectée dans l’autocontrôle"
+        }
+      ]
     }
   },
   "addNodes": [
@@ -152,6 +173,88 @@
           "label": "Aléatoirement",
           "next": "END-TRANSFER",
           "check": "LED rouge fixe — apparaît aléatoirement"
+        }
+      ]
+    },
+    {
+      "id": "SC-ORANGE-NOT-CONNECTED",
+      "type": "action",
+      "title": "Connexion Internet à corriger",
+      "body": "Un test Wi-Fi est obligatoire. Vérifier un réseau en 2,4 GHz avec un niveau de réception cible d’au moins -65 dBm. Faire réintervenir le professionnel pour corriger ou terminer la mise en service de la connexion.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "reintervention",
+          "label": "Demander le test Wi-Fi et faire réintervenir le professionnel",
+          "next": "END-REINTERVENTION",
+          "check": "LED orange clignotante — test Wi-Fi obligatoire et réintervention professionnel"
+        }
+      ]
+    },
+    {
+      "id": "SC-ORANGE-SUPERVISION",
+      "type": "question",
+      "title": "Quelle supervision est utilisée ?",
+      "body": "Identifier la supervision avant de contrôler la qualité du réseau Wi-Fi.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "wiser",
+          "label": "Wiser",
+          "next": "SC-ORANGE-WIFI-WISER",
+          "check": "LED orange clignotante — supervision Wiser"
+        },
+        {
+          "id": "smartcharge",
+          "label": "Smartcharge",
+          "next": "SC-ORANGE-WIFI-SMARTCHARGE",
+          "check": "LED orange clignotante — supervision Smartcharge"
+        }
+      ]
+    },
+    {
+      "id": "SC-ORANGE-WIFI-WISER",
+      "type": "question",
+      "title": "Le test Wi-Fi est-il conforme ?",
+      "body": "Le test Wi-Fi est obligatoire : réseau 2,4 GHz et niveau de réception cible d’au moins -65 dBm.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "conform",
+          "label": "Oui, 2,4 GHz et signal ≥ -65 dBm",
+          "next": "F-096",
+          "check": "LED orange clignotante — Wi-Fi conforme, poursuite branche Wiser"
+        },
+        {
+          "id": "not-conform",
+          "label": "Non, test absent ou non conforme",
+          "next": "END-REINTERVENTION",
+          "check": "LED orange clignotante — Wi-Fi absent ou non conforme, réintervention professionnel"
+        }
+      ]
+    },
+    {
+      "id": "SC-ORANGE-WIFI-SMARTCHARGE",
+      "type": "question",
+      "title": "Le test Wi-Fi est-il conforme ?",
+      "body": "Le test Wi-Fi est obligatoire : réseau 2,4 GHz et niveau de réception cible d’au moins -65 dBm.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "conform",
+          "label": "Oui, 2,4 GHz et signal ≥ -65 dBm",
+          "next": "END-TRANSFER",
+          "check": "LED orange clignotante — Wi-Fi conforme, transmission Service Technique Smartcharge"
+        },
+        {
+          "id": "not-conform",
+          "label": "Non, test absent ou non conforme",
+          "next": "END-REINTERVENTION",
+          "check": "LED orange clignotante — Wi-Fi absent ou non conforme, réintervention professionnel"
         }
       ]
     }
