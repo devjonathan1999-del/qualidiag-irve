@@ -20,6 +20,20 @@ export function answerButtons(answers = []) {
   }).join('');
 }
 
+function inputMarkup(input) {
+  if (!input) return '';
+  const required = input.required ? ' required' : '';
+  const placeholder = input.placeholder ? ` placeholder="${escapeHtml(input.placeholder)}"` : '';
+  if (input.type === 'textarea') {
+    return `<div class="field-group">
+      <label class="field-label" for="qualidiag-input">${escapeHtml(input.label ?? 'Complément')}</label>
+      <textarea id="qualidiag-input" class="field-input" data-input data-input-key="${escapeHtml(input.key)}" rows="5"${required}${placeholder}>${escapeHtml(input.value ?? '')}</textarea>
+      <p class="field-error" data-input-error aria-live="polite"></p>
+    </div>`;
+  }
+  return '';
+}
+
 function shell(content) {
   return `<section class="shell">
     <header class="app-header">
@@ -48,14 +62,33 @@ export function render(root, viewModel, handlers = {}) {
       <div class="kind-badge">${viewModel.kind === 'action' ? 'Action' : viewModel.kind === 'conclusion' ? 'Conclusion' : 'Question'}</div>
       <h2>${escapeHtml(viewModel.title)}</h2>
       ${viewModel.body ? `<p class="body-copy">${escapeHtml(viewModel.body)}</p>` : ''}
+      ${!isConclusion ? inputMarkup(viewModel.input) : ''}
       ${isConclusion ? `<textarea class="summary" readonly aria-label="Résumé Salesforce">${escapeHtml(viewModel.summary)}</textarea><p class="copy-status" data-copy-status aria-live="polite"></p>` : ''}
       ${controls}
       ${viewModel.canGoBack && !isConclusion ? '<button class="back" type="button" data-back>← Retour</button>' : ''}
     </article>
   `);
 
+  const inputElement = root.querySelector('[data-input]');
+  const inputError = root.querySelector('[data-input-error]');
+  inputElement?.addEventListener('input', () => {
+    if (inputError) inputError.textContent = '';
+  });
+
   root.querySelectorAll('[data-answer]').forEach(button => {
-    button.addEventListener('click', () => handlers.onAnswer?.(button.dataset.answer));
+    button.addEventListener('click', () => {
+      const fieldSet = {};
+      if (viewModel.input && inputElement) {
+        const value = inputElement.value.trim();
+        if (viewModel.input.required && !value) {
+          if (inputError) inputError.textContent = 'Ce champ est obligatoire.';
+          inputElement.focus();
+          return;
+        }
+        fieldSet[viewModel.input.key] = value;
+      }
+      handlers.onAnswer?.(button.dataset.answer, fieldSet);
+    });
   });
   root.querySelector('[data-back]')?.addEventListener('click', () => handlers.onBack?.());
   root.querySelector('[data-restart]')?.addEventListener('click', () => handlers.onRestart?.());
