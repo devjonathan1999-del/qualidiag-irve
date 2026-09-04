@@ -13,6 +13,7 @@ const DATA_FILES = {
   models: 'models.json',
   nodes: NODE_FILES,
   powerPolicy: 'power-policy.json',
+  schneiderChargePolicy: 'schneider-charge-policy.json',
   procedures: 'procedures.json',
   conclusions: 'conclusions.json',
   resources: 'resources.json'
@@ -70,6 +71,21 @@ export function applyPowerPolicy(nodes = [], policy = {}) {
   return [...output, ...alerts];
 }
 
+export function applySchneiderChargePolicy(nodes = [], policy = {}) {
+  const overrides = policy?.nodes ?? {};
+  return nodes.map(node => {
+    const override = overrides[node.id];
+    if (!override) return node;
+    return {
+      ...node,
+      ...override,
+      answers: Array.isArray(override.answers)
+        ? override.answers.map(answer => ({ ...answer }))
+        : node.answers
+    };
+  });
+}
+
 export async function loadData(baseUrl = '../data/') {
   const base = baseUrl instanceof URL ? baseUrl : new URL(baseUrl, import.meta.url);
   const entries = await Promise.all(Object.entries(DATA_FILES).map(async ([key, file]) => {
@@ -81,6 +97,7 @@ export async function loadData(baseUrl = '../data/') {
   }));
   const data = Object.fromEntries(entries);
   data.nodes = applyPowerPolicy(data.nodes, data.powerPolicy);
+  data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderChargePolicy);
   return data;
 }
 
