@@ -55,6 +55,27 @@
         }
       ]
     },
+    "F-087": {
+      "type": "question",
+      "title": "Charge faible",
+      "body": "Le câble T2 utilisé est-il bien un câble 32 A ? Un câble 16 A limite automatiquement la puissance de charge.",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "cable-32a",
+          "label": "Oui, câble T2 32 A confirmé",
+          "next": "SC-LOW-VEHICLE",
+          "check": "Charge faible — câble T2 32 A confirmé"
+        },
+        {
+          "id": "cable-16a",
+          "label": "Non, câble 16 A",
+          "next": "END-RESOLVED",
+          "check": "Charge faible — câble T2 16 A identifié comme cause de limitation"
+        }
+      ]
+    },
     "F-089": {
       "type": "question",
       "title": "LED bleue clignotante",
@@ -173,6 +194,94 @@
           "label": "Aléatoirement",
           "next": "END-TRANSFER",
           "check": "LED rouge fixe — apparaît aléatoirement"
+        }
+      ]
+    },
+    {
+      "id": "SC-LOW-VEHICLE",
+      "type": "question",
+      "title": "Le véhicule limite-t-il la puissance de charge ?",
+      "body": "Vérifier côté véhicule qu’aucune limitation de puissance de charge n’est paramétrée.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "vehicle-limited",
+          "label": "Oui, une limitation est paramétrée côté véhicule",
+          "next": "END-RESOLVED",
+          "check": "Charge faible — limitation de puissance identifiée côté véhicule"
+        },
+        {
+          "id": "vehicle-not-limited",
+          "label": "Non, aucune limitation côté véhicule",
+          "next": "SC-LOW-PEAK",
+          "check": "Charge faible — aucune limitation côté véhicule"
+        }
+      ]
+    },
+    {
+      "id": "SC-LOW-PEAK",
+      "type": "question",
+      "title": "Cas 12 kVA + Peak Controller",
+      "body": "Le client est-il en 12 kVA avec un Peak Controller réglé à 50 A ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "peak-12kva-50a",
+          "label": "Oui, 12 kVA avec Peak Controller à 50 A",
+          "next": "SC-LOW-PEAK-MANEUVER",
+          "check": "Charge faible — cas 12 kVA avec Peak Controller 50 A"
+        },
+        {
+          "id": "not-peak-case",
+          "label": "Non",
+          "next": "SC-LOW-DPM",
+          "check": "Charge faible — hors cas 12 kVA avec Peak Controller 50 A"
+        }
+      ]
+    },
+    {
+      "id": "SC-LOW-PEAK-MANEUVER",
+      "type": "question",
+      "title": "Réinitialiser le réglage du Peak Controller",
+      "body": "Demandez au client d’appuyer sur le bouton SET, puis d’effectuer une rotation complète du réglage pour revenir à 50 A. Refaire ensuite un essai de charge.",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "charge-normal",
+          "label": "La charge est redevenue normale",
+          "next": "END-RESOLVED",
+          "check": "Charge faible — défaut résolu après rotation complète du Peak Controller et retour à 50 A"
+        },
+        {
+          "id": "still-low",
+          "label": "La charge reste faible",
+          "next": "SC-LOW-DPM",
+          "check": "Charge faible — persiste après manipulation du Peak Controller"
+        }
+      ]
+    },
+    {
+      "id": "SC-LOW-DPM",
+      "type": "question",
+      "title": "La gestion dynamique explique-t-elle la charge faible ?",
+      "body": "Vérifier si une consommation élevée du logement entraîne une réduction de puissance par la gestion dynamique. Si aucune cause évidente n’est identifiée, transmettre au Service Technique.",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "dynamic-limitation",
+          "label": "Oui, la consommation du logement explique la limitation",
+          "next": "END-RESOLVED",
+          "check": "Charge faible — limitation expliquée par la gestion dynamique et la consommation du logement"
+        },
+        {
+          "id": "no-obvious-cause",
+          "label": "Non, aucune cause évidente",
+          "next": "END-TRANSFER",
+          "check": "Charge faible — aucune cause identifiée, transmission Service Technique"
         }
       ]
     },
