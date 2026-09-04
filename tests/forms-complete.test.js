@@ -1,9 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { NODE_FILES } from '../app/data.js';
 
 async function loadNodes() {
-  return JSON.parse(await readFile(new URL('../data/diagnostics.json', import.meta.url), 'utf8'));
+  const base = new URL('../data/', import.meta.url);
+  const chunks = await Promise.all(
+    NODE_FILES.map(async file => JSON.parse(await readFile(new URL(file, base), 'utf8')))
+  );
+  return chunks.flat();
 }
 
 const expectedSymptoms = {
