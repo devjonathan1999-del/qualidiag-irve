@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { applyPowerPolicy } from '../app/data.js';
 
 async function loadCommon() {
-  return JSON.parse(await readFile(new URL('../data/diagnostics/common.json', import.meta.url), 'utf8'));
+  const nodes = JSON.parse(await readFile(new URL('../data/diagnostics/common.json', import.meta.url), 'utf8'));
+  const policy = JSON.parse(await readFile(new URL('../data/power-policy.json', import.meta.url), 'utf8'));
+  return applyPowerPolicy(nodes, policy);
 }
 
 test('le tronc commun ne demande aucune identité client', async () => {
