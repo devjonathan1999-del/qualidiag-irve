@@ -1,0 +1,26 @@
+{
+  "mono": {
+    "nodeId": "Q-POWER-MONO",
+    "allowed": ["6", "9", "12", "other"],
+    "warnings": {
+      "6": {
+        "nodeId": "A-POWER-WARNING-MONO-6",
+        "title": "⚠️ Alerte — 6 kVA monophasé",
+        "body": "Cette puissance nécessite une vérification avant de poursuivre. Vérifiez la cohérence de la puissance d'abonnement avec la vente.",
+        "check": "Alerte puissance : 6 kVA monophasé"
+      }
+    }
+  },
+  "tri": {
+    "nodeId": "Q-POWER-TRI",
+    "allowed": ["12", "15", "18", "24", "30", "36", "other"],
+    "warnings": {
+      "12": {
+        "nodeId": "A-POWER-WARNING-TRI-12",
+        "title": "⚠️ Alerte — 12 kVA triphasé",
+        "body": "Cette puissance nécessite une vérification avant de poursuivre. Vérifiez la cohérence de la puissance d'abonnement avec la vente.",
+        "check": "Alerte puissance : 12 kVA triphasé"
+      }
+    }
+  }
+}
