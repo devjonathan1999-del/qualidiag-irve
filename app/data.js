@@ -1,18 +1,36 @@
+export const NODE_FILES = [
+  'diagnostics/common.json',
+  'diagnostics/vestel.json',
+  'diagnostics/wallbox.json',
+  'diagnostics/free2move.json',
+  'diagnostics/hager.json',
+  'diagnostics/schneider-charge.json',
+  'diagnostics/schneider-charge-pro.json'
+];
+
 const DATA_FILES = {
   brands: 'brands.json',
   models: 'models.json',
-  nodes: 'diagnostics.json',
+  nodes: NODE_FILES,
   procedures: 'procedures.json',
   conclusions: 'conclusions.json',
   resources: 'resources.json'
 };
 
+async function fetchJson(file, base) {
+  const response = await fetch(new URL(file, base));
+  if (!response.ok) throw new Error(`Chargement impossible: ${file} (${response.status})`);
+  return response.json();
+}
+
 export async function loadData(baseUrl = '../data/') {
   const base = baseUrl instanceof URL ? baseUrl : new URL(baseUrl, import.meta.url);
   const entries = await Promise.all(Object.entries(DATA_FILES).map(async ([key, file]) => {
-    const response = await fetch(new URL(file, base));
-    if (!response.ok) throw new Error(`Chargement impossible: ${file} (${response.status})`);
-    return [key, await response.json()];
+    if (Array.isArray(file)) {
+      const chunks = await Promise.all(file.map(path => fetchJson(path, base)));
+      return [key, chunks.flat()];
+    }
+    return [key, await fetchJson(file, base)];
   }));
   return Object.fromEntries(entries);
 }
