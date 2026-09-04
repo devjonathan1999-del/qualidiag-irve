@@ -16,13 +16,14 @@ export function createSession(startNodeId) {
   };
 }
 
-export function recordAnswer(session, node, answer) {
+export function recordAnswer(session, node, answer, fieldSet = {}) {
+  const fieldContext = { ...session.context, ...fieldSet };
   const snapshot = {
     nodeId: node.id,
-    context: cloneContext(session.context),
+    context: cloneContext(fieldContext),
     checks: cloneChecks(session.checks)
   };
-  const context = { ...session.context, ...(answer.set ?? {}) };
+  const context = { ...fieldContext, ...(answer.set ?? {}) };
   const checks = answer.check ? [...session.checks, answer.check] : [...session.checks];
 
   return {
