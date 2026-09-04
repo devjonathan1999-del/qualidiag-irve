@@ -20,8 +20,11 @@ function contextView(context = {}) {
 
 function resolveBody(node, context = {}) {
   if (!node.bodyByContext) return node.body ?? '';
-  const { key, values = {}, fallback = '' } = node.bodyByContext;
-  return values[context[key]] ?? fallback;
+  const { key, keys, separator = '|', values = {}, fallback = '' } = node.bodyByContext;
+  const lookup = Array.isArray(keys) && keys.length
+    ? keys.map(item => context[item] ?? '').join(separator)
+    : context[key];
+  return values[lookup] ?? fallback;
 }
 
 function resolveInput(node, context = {}) {
