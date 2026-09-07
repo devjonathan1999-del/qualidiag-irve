@@ -7,16 +7,30 @@ function escapeHtml(value = '') {
     .replaceAll("'", '&#039;');
 }
 
-function contextMarkup(context = {}) {
+export function contextMarkup(context = {}) {
   const items = [context.brand, context.model, context.symptom].filter(Boolean);
   if (!items.length) return '';
-  return `<div class="context" aria-label="Contexte du diagnostic">${items.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div>`;
+
+  return `<nav class="context-breadcrumb" aria-label="Contexte du diagnostic">
+    ${items.map((item, index) => {
+      const current = index === items.length - 1 ? ' aria-current="page"' : '';
+      const separator = index < items.length - 1
+        ? '<span class="context-separator" aria-hidden="true">›</span>'
+        : '';
+      return `<span class="context-item"${current}>${escapeHtml(item)}</span>${separator}`;
+    }).join('')}
+  </nav>`;
+}
+
+export function bodyMarkup(body = '') {
+  if (!body) return '';
+  return `<div class="body-panel"><p class="body-copy">${escapeHtml(body)}</p></div>`;
 }
 
 export function answerButtons(answers = []) {
   return answers.map(answer => {
     const disabled = answer.disabled ? ' disabled aria-disabled="true"' : '';
-    return `<button class="answer" type="button" data-answer="${escapeHtml(answer.id)}"${disabled}>${escapeHtml(answer.label)}</button>`;
+    return `<button class="answer" type="button" data-answer="${escapeHtml(answer.id)}"${disabled}><span class="answer-label">${escapeHtml(answer.label)}</span><span class="answer-arrow" aria-hidden="true">›</span></button>`;
   }).join('');
 }
 
@@ -37,7 +51,7 @@ function inputMarkup(input) {
 function shell(content) {
   return `<section class="shell">
     <header class="app-header">
-      <div>
+      <div class="app-title">
         <p class="eyebrow">Qualification SAV IRVE</p>
         <h1>QualiDiag IRVE</h1>
       </div>
@@ -59,13 +73,15 @@ export function render(root, viewModel, handlers = {}) {
   root.innerHTML = shell(`
     ${contextMarkup(viewModel.context)}
     <article class="card ${escapeHtml(viewModel.kind)}">
-      <div class="kind-badge">${viewModel.kind === 'action' ? 'Action' : viewModel.kind === 'conclusion' ? 'Conclusion' : 'Question'}</div>
-      <h2>${escapeHtml(viewModel.title)}</h2>
-      ${viewModel.body ? `<p class="body-copy">${escapeHtml(viewModel.body)}</p>` : ''}
+      <div class="card-heading">
+        <div class="kind-badge">${viewModel.kind === 'action' ? 'Action' : viewModel.kind === 'conclusion' ? 'Conclusion' : 'Question'}</div>
+        <h2>${escapeHtml(viewModel.title)}</h2>
+      </div>
+      ${bodyMarkup(viewModel.body)}
       ${!isConclusion ? inputMarkup(viewModel.input) : ''}
       ${isConclusion ? `<textarea class="summary" readonly aria-label="Résumé Salesforce">${escapeHtml(viewModel.summary)}</textarea><p class="copy-status" data-copy-status aria-live="polite"></p>` : ''}
       ${controls}
-      ${viewModel.canGoBack && !isConclusion ? '<button class="back" type="button" data-back>← Retour</button>' : ''}
+      ${viewModel.canGoBack && !isConclusion ? '<div class="card-footer"><button class="back" type="button" data-back>← Retour</button></div>' : ''}
     </article>
   `);
 
@@ -100,9 +116,11 @@ export function renderDraftPrompt(root, draft, handlers = {}) {
   const details = [context.brand, context.model, context.symptom].filter(Boolean).join(' · ') || 'Qualification en cours';
   root.innerHTML = shell(`
     <article class="card">
-      <div class="kind-badge">Brouillon local</div>
-      <h2>Une qualification était en cours</h2>
-      <p class="body-copy">${escapeHtml(details)}</p>
+      <div class="card-heading">
+        <div class="kind-badge">Brouillon local</div>
+        <h2>Une qualification était en cours</h2>
+      </div>
+      ${bodyMarkup(details)}
       <div class="actions">
         <button class="primary" type="button" data-resume>Reprendre la qualification</button>
         <button class="secondary" type="button" data-discard>Nouvelle qualification</button>
@@ -116,8 +134,10 @@ export function renderDraftPrompt(root, draft, handlers = {}) {
 export function renderFatalDataError(root, errors = []) {
   root.innerHTML = shell(`
     <article class="card error-card">
-      <div class="kind-badge">Erreur</div>
-      <h2>Impossible de charger la base QualiDiag.</h2>
+      <div class="card-heading">
+        <div class="kind-badge">Erreur</div>
+        <h2>Impossible de charger la base QualiDiag.</h2>
+      </div>
       ${errors.length ? `<ul>${errors.map(error => `<li>${escapeHtml(error)}</li>`).join('')}</ul>` : ''}
     </article>
   `);
@@ -126,9 +146,11 @@ export function renderFatalDataError(root, errors = []) {
 export function renderGraphError(root, summary, handlers = {}) {
   root.innerHTML = shell(`
     <article class="card error-card">
-      <div class="kind-badge">Parcours incomplet</div>
-      <h2>Parcours incomplet — transmettre au Service Technique</h2>
-      <p class="body-copy">Les réponses déjà renseignées sont conservées.</p>
+      <div class="card-heading">
+        <div class="kind-badge">Parcours incomplet</div>
+        <h2>Parcours incomplet — transmettre au Service Technique</h2>
+      </div>
+      ${bodyMarkup('Les réponses déjà renseignées sont conservées.')}
       <textarea class="summary" readonly aria-label="Résumé partiel">${escapeHtml(summary)}</textarea>
       <p class="copy-status" data-copy-status aria-live="polite"></p>
       <div class="actions">
