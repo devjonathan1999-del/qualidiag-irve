@@ -23,7 +23,7 @@ const DATA_FILES = {
 };
 
 async function fetchJson(file, base) {
-  const response = await fetch(new URL(file, base));
+  const response = await fetch(new URL(file, base), { cache: 'no-store' });
   if (!response.ok) throw new Error(`Chargement impossible: ${file} (${response.status})`);
   return response.json();
 }
