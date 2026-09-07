@@ -1,0 +1,73 @@
+{
+  "nodes": {
+    "Q-AC-EXPLOITABLE": {
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "yes",
+          "label": "Oui",
+          "next": "Q-AC-CONFORME",
+          "check": "Autocontrôle exploitable"
+        },
+        {
+          "id": "no",
+          "label": "Non",
+          "next": "A-AC-UNUSABLE-REASON",
+          "check": "Autocontrôle non exploitable"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "A-AC-UNUSABLE-REASON",
+      "type": "action",
+      "title": "Pourquoi l’autocontrôle n’est-il pas exploitable ?",
+      "body": "Précisez le motif avant de poursuivre la qualification.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "input": {
+        "type": "textarea",
+        "key": "autocontrol.unusableReason",
+        "label": "Motif",
+        "placeholder": "Photos manquantes, photos illisibles, autocontrôle incomplet, informations incohérentes, autre motif…",
+        "required": true
+      },
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Continuer",
+          "next": "Q-AC-REINTERVENTION"
+        }
+      ]
+    },
+    {
+      "id": "Q-AC-REINTERVENTION",
+      "type": "question",
+      "title": "Une réintervention est-elle en cours ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "yes",
+          "label": "Oui",
+          "next": "Q-VEHICLE",
+          "set": {
+            "autocontrol.reintervention": "En cours"
+          },
+          "check": "Réintervention en cours"
+        },
+        {
+          "id": "no",
+          "label": "Non",
+          "next": "Q-VEHICLE",
+          "set": {
+            "autocontrol.reintervention": "Aucune réintervention en cours"
+          },
+          "check": "Aucune réintervention en cours"
+        }
+      ]
+    }
+  ]
+}
