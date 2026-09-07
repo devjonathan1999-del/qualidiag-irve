@@ -1,0 +1,118 @@
+{
+  "nodes": {
+    "F-098": {
+      "type": "question",
+      "title": "Quel est le problème rencontré ?",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "l-installation-disjoncte",
+          "label": "L'installation disjoncte",
+          "next": "F-084",
+          "check": "Schneider Charge Pro — installation disjoncte",
+          "set": {
+            "symptom": "L'installation disjoncte"
+          }
+        },
+        {
+          "id": "led-rouge-fixe",
+          "label": "LED rouge fixe",
+          "next": "F-090",
+          "check": "Schneider Charge Pro — LED rouge fixe",
+          "set": {
+            "symptom": "LED rouge fixe"
+          }
+        },
+        {
+          "id": "led-bleue-clignotante",
+          "label": "LED bleue clignotante",
+          "next": "SCP-BLUE-WAIT",
+          "check": "Schneider Charge Pro — LED bleue clignotante",
+          "set": {
+            "symptom": "LED bleue clignotante"
+          }
+        },
+        {
+          "id": "led-orange-respirant",
+          "label": "LED orange clignotante",
+          "next": "SCP-ORANGE-RESET",
+          "check": "Schneider Charge Pro — LED orange clignotante",
+          "set": {
+            "symptom": "LED orange clignotante"
+          }
+        },
+        {
+          "id": "charge-faible",
+          "label": "Charge faible",
+          "next": "F-087",
+          "check": "Schneider Charge Pro — charge faible",
+          "set": {
+            "symptom": "Charge faible"
+          }
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "SCP-BLUE-WAIT",
+      "type": "question",
+      "title": "La charge est-elle volontairement mise en attente ?",
+      "body": "Exemples : programmation du véhicule, supervision, gestion de charge ou puissance disponible.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "waiting",
+          "label": "Oui, la mise en attente est expliquée",
+          "next": "END-RESOLVED",
+          "check": "Charge Pro LED bleue clignotante — mise en attente volontaire identifiée"
+        },
+        {
+          "id": "not-waiting",
+          "label": "Non, aucune mise en attente connue",
+          "next": "END-TRANSFER",
+          "check": "Charge Pro LED bleue clignotante — aucune mise en attente identifiée, transmission Service Technique"
+        }
+      ]
+    },
+    {
+      "id": "SCP-ORANGE-RESET",
+      "type": "action",
+      "title": "Redémarrer la borne au disjoncteur",
+      "body": "Couper la borne au disjoncteur pendant 5 minutes, puis remettre sous tension.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "restart-done",
+          "label": "La borne a été remise sous tension",
+          "next": "SCP-ORANGE-RESULT",
+          "check": "Charge Pro LED orange clignotante — reset 5 minutes au disjoncteur réalisé"
+        }
+      ]
+    },
+    {
+      "id": "SCP-ORANGE-RESULT",
+      "type": "question",
+      "title": "La LED orange clignotante a-t-elle disparu ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "resolved",
+          "label": "Oui, la LED est revenue à un état normal",
+          "next": "END-RESOLVED",
+          "check": "Charge Pro LED orange clignotante — défaut résolu après reset 5 minutes"
+        },
+        {
+          "id": "still-orange",
+          "label": "Non, la LED orange clignotante persiste",
+          "next": "END-TRANSFER",
+          "check": "Charge Pro LED orange clignotante — défaut persistant après reset 5 minutes, transmission Service Technique"
+        }
+      ]
+    }
+  ]
+}
