@@ -1,10 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { applySchneiderChargePolicy } from '../app/data.js';
 import { buildSalesforceSummary } from '../app/summary.js';
 
 const common = JSON.parse(await readFile(new URL('../data/diagnostics/common.json', import.meta.url), 'utf8'));
-const byId = new Map(common.map(node => [node.id, node]));
+const policy = JSON.parse(await readFile(new URL('../data/autocontrol-policy.json', import.meta.url), 'utf8'));
+const effectiveNodes = applySchneiderChargePolicy(common, policy);
+const byId = new Map(effectiveNodes.map(node => [node.id, node]));
 
 test('un autocontrôle non exploitable demande obligatoirement pourquoi', () => {
   const exploitable = byId.get('Q-AC-EXPLOITABLE');
