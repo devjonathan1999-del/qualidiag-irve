@@ -1,0 +1,102 @@
+{
+  "nodes": {
+    "F-083": {
+      "type": "question",
+      "title": "Quel est le problème rencontré avec Smartcharge ?",
+      "body": "Sélectionnez le type de problème rencontré avec l’application Smartcharge.",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "usage",
+          "label": "Problème d’utilisation / compréhension de l’application",
+          "next": "SC-SMART-USAGE-GUIDE",
+          "check": "Smartcharge — problème d’utilisation ou de compréhension"
+        },
+        {
+          "id": "technical",
+          "label": "Problème technique / application ou borne qui ne fonctionne pas correctement",
+          "next": "SC-SMART-TECH-CAPTURE",
+          "check": "Smartcharge — problème technique"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "SC-SMART-USAGE-GUIDE",
+      "type": "action",
+      "title": "Transmettre le guide Smartcharge",
+      "body": "Fournissez au client le guide d’utilisation Smartcharge : https://recowin.sharepoint.com/:b:/r/sites/IRVE-IRVEMaisonetEntreprise/Base%20documentaire/02.%20Technique/02.%20Fiches%20produits%20clients%20-%20brochure%20IRVE/02.%20Schneider%20Electric/2026_Guide%20utilisation_appSmartCharge.pdf?csf=1&web=1&e=YSk87U",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "guide-shared",
+          "label": "Le guide a été transmis / consulté",
+          "next": "SC-SMART-USAGE-RESULT",
+          "check": "Smartcharge — guide d’utilisation transmis ou consulté"
+        }
+      ]
+    },
+    {
+      "id": "SC-SMART-USAGE-RESULT",
+      "type": "question",
+      "title": "Le problème est-il résolu après consultation du guide ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "resolved",
+          "label": "Oui, le problème est résolu",
+          "next": "END-RESOLVED",
+          "check": "Smartcharge — problème d’utilisation résolu avec le guide"
+        },
+        {
+          "id": "not-resolved",
+          "label": "Non, le problème persiste",
+          "next": "END-TRANSFER",
+          "check": "Smartcharge — problème d’utilisation persistant après consultation du guide"
+        }
+      ]
+    },
+    {
+      "id": "SC-SMART-TECH-CAPTURE",
+      "type": "action",
+      "title": "Récupérer une capture Smartcharge",
+      "body": "Demandez une capture d’écran du problème rencontré dans Smartcharge avant de poursuivre la qualification.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "capture-collected",
+          "label": "J’ai récupéré la capture d’écran",
+          "next": "SC-SMART-TECH-CONNECTIVITY",
+          "check": "Smartcharge — capture d’écran récupérée"
+        }
+      ]
+    },
+    {
+      "id": "SC-SMART-TECH-CONNECTIVITY",
+      "type": "question",
+      "title": "La borne est-elle connectée à Internet ?",
+      "body": "Utilisez l’information disponible dans l’autocontrôle pour confirmer la connexion Internet de la borne.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "connected",
+          "label": "Oui, la borne est connectée",
+          "next": "END-TRANSFER",
+          "check": "Smartcharge — borne connectée, transmission Service Technique avec capture"
+        },
+        {
+          "id": "not-connected",
+          "label": "Non, la borne n’est pas connectée",
+          "next": "F-091",
+          "check": "Smartcharge — borne non connectée, renvoi vers le parcours connectivité"
+        }
+      ]
+    }
+  ]
+}

@@ -15,6 +15,7 @@ const DATA_FILES = {
   powerPolicy: 'power-policy.json',
   schneiderChargePolicy: 'schneider-charge-policy.json',
   schneiderWiserPolicy: 'schneider-wiser-policy.json',
+  schneiderSmartchargePolicy: 'schneider-smartcharge-policy.json',
   procedures: 'procedures.json',
   conclusions: 'conclusions.json',
   resources: 'resources.json'
@@ -97,6 +98,47 @@ export function applySchneiderChargePolicy(nodes = [], policy = {}) {
   return [...output, ...additions];
 }
 
+export function applyFinalNotePolicy(nodes = []) {
+  const conclusionIds = new Set(
+    nodes.filter(node => node?.type === 'conclusion' && node.id).map(node => node.id)
+  );
+
+  const output = nodes.map(node => ({
+    ...node,
+    answers: Array.isArray(node.answers)
+      ? node.answers.map(answer => {
+          let next = answer.next;
+          if (next === 'F-106') next = 'F-107';
+          if (conclusionIds.has(next)) next = `FINAL-NOTE-${next}`;
+          return { ...answer, next };
+        })
+      : node.answers
+  }));
+
+  const finalNotes = [...conclusionIds].map(endId => ({
+    id: `FINAL-NOTE-${endId}`,
+    type: 'action',
+    title: 'Informations complémentaires',
+    body: 'Ajoutez si nécessaire tout élément utile non couvert par le parcours : véhicule, contexte client, essai déjà réalisé, comportement particulier ou autre précision utile.',
+    source: 'Validation métier',
+    validation: 'valide',
+    input: {
+      type: 'textarea',
+      key: 'final.additionalInfo',
+      label: 'Informations complémentaires',
+      placeholder: 'Ajouter une précision utile…',
+      required: false
+    },
+    answers: [{
+      id: 'continue',
+      label: 'Terminer la qualification',
+      next: endId
+    }]
+  }));
+
+  return [...output, ...finalNotes];
+}
+
 export async function loadData(baseUrl = '../data/') {
   const base = baseUrl instanceof URL ? baseUrl : new URL(baseUrl, import.meta.url);
   const entries = await Promise.all(Object.entries(DATA_FILES).map(async ([key, file]) => {
@@ -110,6 +152,8 @@ export async function loadData(baseUrl = '../data/') {
   data.nodes = applyPowerPolicy(data.nodes, data.powerPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderChargePolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderWiserPolicy);
+  data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderSmartchargePolicy);
+  data.nodes = applyFinalNotePolicy(data.nodes);
   return data;
 }
 
