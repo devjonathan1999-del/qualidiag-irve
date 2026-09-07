@@ -4,6 +4,8 @@ export function buildSalesforceSummary(session, conclusion = {}) {
   const fields = [
     ['Installation', context['installation.phase']],
     ['Abonnement', context['installation.power']],
+    ['Autocontrôle inexploitable', context['autocontrol.unusableReason']],
+    ['Réintervention', context['autocontrol.reintervention']],
     ['Non-conformité AC', context['autocontrol.nonConformity']],
     ['Borne', context.brand],
     ['Modèle', context.model],
