@@ -14,6 +14,7 @@ const DATA_FILES = {
   nodes: NODE_FILES,
   powerPolicy: 'power-policy.json',
   schneiderChargePolicy: 'schneider-charge-policy.json',
+  schneiderWiserPolicy: 'schneider-wiser-policy.json',
   procedures: 'procedures.json',
   conclusions: 'conclusions.json',
   resources: 'resources.json'
@@ -108,6 +109,7 @@ export async function loadData(baseUrl = '../data/') {
   const data = Object.fromEntries(entries);
   data.nodes = applyPowerPolicy(data.nodes, data.powerPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderChargePolicy);
+  data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderWiserPolicy);
   return data;
 }
 
