@@ -10,7 +10,9 @@ async function loadJson(path) {
 async function effectiveSchneiderNodes() {
   const nodes = await loadJson('../data/diagnostics/schneider-charge.json');
   const policy = await loadJson('../data/schneider-charge-policy.json');
-  return applySchneiderChargePolicy(nodes, policy);
+  const wiserPolicy = await loadJson('../data/schneider-wiser-policy.json');
+  const withValidatedSchneider = applySchneiderChargePolicy(nodes, policy);
+  return applySchneiderChargePolicy(withValidatedSchneider, wiserPolicy);
 }
 
 test('Wiser croix rouge demande le message exact affiché avec trois choix métier', async () => {
@@ -45,6 +47,7 @@ test('la demande de reconfiguration Wiser fait refaire l’association puis vér
   assert.match(result.title, /apparaît-elle de nouveau.*Wiser/i);
   assert.equal(result.answers.find(answer => answer.id === 'visible').next, 'END-RESOLVED');
   assert.equal(result.answers.find(answer => answer.id === 'still-missing').next, 'END-TRANSFER');
+  assert.match(result.answers.find(answer => answer.id === 'still-missing').check, /message affiché/i);
 });
 
 test('un autre problème Wiser exige une capture écran avant transfert au Service Technique', async () => {
