@@ -10,9 +10,7 @@
         "id": "complaint",
         "label": "J'ai une réclamation client",
         "next": "Q-PHASE",
-        "set": {
-          "use.case": "Réclamation client"
-        }
+        "set": { "use.case": "Réclamation client" }
       },
       {
         "id": "info",
@@ -20,9 +18,7 @@
         "next": "END-INFO",
         "disabled": true,
         "validation": "a_valider",
-        "set": {
-          "use.case": "Recherche d'information"
-        }
+        "set": { "use.case": "Recherche d'information" }
       }
     ]
   },
@@ -37,18 +33,14 @@
         "id": "mono",
         "label": "Monophasée",
         "next": "Q-POWER-MONO",
-        "set": {
-          "installation.phase": "Monophasée"
-        },
+        "set": { "installation.phase": "Monophasée" },
         "check": "Installation monophasée confirmée"
       },
       {
         "id": "tri",
         "label": "Triphasée",
         "next": "Q-POWER-TRI",
-        "set": {
-          "installation.phase": "Triphasée"
-        },
+        "set": { "installation.phase": "Triphasée" },
         "check": "Installation triphasée confirmée"
       }
     ]
@@ -61,44 +53,11 @@
     "source": "Forms actuel + validation métier",
     "validation": "valide",
     "answers": [
-      {
-        "id": "3",
-        "label": "3 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "3 kVA"
-        }
-      },
-      {
-        "id": "6",
-        "label": "6 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "6 kVA"
-        }
-      },
-      {
-        "id": "9",
-        "label": "9 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "9 kVA"
-        }
-      },
-      {
-        "id": "12",
-        "label": "12 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "12 kVA"
-        }
-      },
-      {
-        "id": "other",
-        "label": "Autre / à préciser",
-        "next": "Q-AC-EXPLOITABLE",
-        "check": "Puissance d'abonnement à préciser dans le complément"
-      }
+      { "id": "3", "label": "3 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "3 kVA" } },
+      { "id": "6", "label": "6 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "6 kVA" } },
+      { "id": "9", "label": "9 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "9 kVA" } },
+      { "id": "12", "label": "12 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "12 kVA" } },
+      { "id": "other", "label": "Autre / à préciser", "next": "Q-AC-EXPLOITABLE", "check": "Puissance d'abonnement à préciser dans le complément" }
     ]
   },
   {
@@ -109,76 +68,15 @@
     "source": "Forms actuel + validation métier",
     "validation": "valide",
     "answers": [
-      {
-        "id": "6",
-        "label": "6 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "6 kVA"
-        }
-      },
-      {
-        "id": "9",
-        "label": "9 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "9 kVA"
-        }
-      },
-      {
-        "id": "12",
-        "label": "12 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "12 kVA"
-        }
-      },
-      {
-        "id": "15",
-        "label": "15 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "15 kVA"
-        }
-      },
-      {
-        "id": "18",
-        "label": "18 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "18 kVA"
-        }
-      },
-      {
-        "id": "24",
-        "label": "24 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "24 kVA"
-        }
-      },
-      {
-        "id": "30",
-        "label": "30 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "30 kVA"
-        }
-      },
-      {
-        "id": "36",
-        "label": "36 kVA",
-        "next": "Q-AC-EXPLOITABLE",
-        "set": {
-          "installation.power": "36 kVA"
-        }
-      },
-      {
-        "id": "other",
-        "label": "Autre / à préciser",
-        "next": "Q-AC-EXPLOITABLE",
-        "check": "Puissance d'abonnement à préciser dans le complément"
-      }
+      { "id": "6", "label": "6 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "6 kVA" } },
+      { "id": "9", "label": "9 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "9 kVA" } },
+      { "id": "12", "label": "12 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "12 kVA" } },
+      { "id": "15", "label": "15 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "15 kVA" } },
+      { "id": "18", "label": "18 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "18 kVA" } },
+      { "id": "24", "label": "24 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "24 kVA" } },
+      { "id": "30", "label": "30 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "30 kVA" } },
+      { "id": "36", "label": "36 kVA", "next": "Q-AC-EXPLOITABLE", "set": { "installation.power": "36 kVA" } },
+      { "id": "other", "label": "Autre / à préciser", "next": "Q-AC-EXPLOITABLE", "check": "Puissance d'abonnement à préciser dans le complément" }
     ]
   },
   {
@@ -197,8 +95,53 @@
       {
         "id": "no",
         "label": "Non",
-        "next": "END-REINTERVENTION",
+        "next": "A-AC-UNUSABLE-REASON",
         "check": "Autocontrôle non exploitable"
+      }
+    ]
+  },
+  {
+    "id": "A-AC-UNUSABLE-REASON",
+    "type": "action",
+    "title": "Pourquoi l’autocontrôle n’est-il pas exploitable ?",
+    "body": "Précisez le motif avant de poursuivre la qualification.",
+    "source": "Validation métier",
+    "validation": "valide",
+    "input": {
+      "type": "textarea",
+      "key": "autocontrol.unusableReason",
+      "label": "Motif",
+      "placeholder": "Photos manquantes, photos illisibles, autocontrôle incomplet, informations incohérentes, autre motif…",
+      "required": true
+    },
+    "answers": [
+      {
+        "id": "continue",
+        "label": "Continuer",
+        "next": "Q-AC-REINTERVENTION"
+      }
+    ]
+  },
+  {
+    "id": "Q-AC-REINTERVENTION",
+    "type": "question",
+    "title": "Une réintervention est-elle en cours ?",
+    "source": "Validation métier",
+    "validation": "valide",
+    "answers": [
+      {
+        "id": "yes",
+        "label": "Oui",
+        "next": "Q-VEHICLE",
+        "set": { "autocontrol.reintervention": "En cours" },
+        "check": "Réintervention en cours"
+      },
+      {
+        "id": "no",
+        "label": "Non",
+        "next": "Q-VEHICLE",
+        "set": { "autocontrol.reintervention": "Aucune réintervention en cours" },
+        "check": "Aucune réintervention en cours"
       }
     ]
   },
@@ -231,11 +174,7 @@
     "source": "Forms actuel + validation métier",
     "validation": "valide",
     "answers": [
-      {
-        "id": "continue",
-        "label": "Continuer",
-        "next": "Q-VEHICLE"
-      }
+      { "id": "continue", "label": "Continuer", "next": "Q-VEHICLE" }
     ]
   },
   {
@@ -252,11 +191,7 @@
         "next": "Q-BRAND",
         "check": "Informations véhicule à préciser dans le complément"
       },
-      {
-        "id": "skip",
-        "label": "Passer",
-        "next": "Q-BRAND"
-      }
+      { "id": "skip", "label": "Passer", "next": "Q-BRAND" }
     ]
   },
   {
@@ -267,57 +202,12 @@
     "source": "Forms actuel + validation métier",
     "validation": "valide",
     "answers": [
-      {
-        "id": "vestel",
-        "label": "Vestel IZI by EDF",
-        "next": "F-011",
-        "set": {
-          "brand": "Vestel IZI by EDF"
-        }
-      },
-      {
-        "id": "wallbox",
-        "label": "Wallbox",
-        "next": "F-027",
-        "set": {
-          "brand": "Wallbox"
-        }
-      },
-      {
-        "id": "free2move",
-        "label": "Free2Move",
-        "next": "F-054",
-        "set": {
-          "brand": "Free2Move",
-          "model": "eProWallbox"
-        }
-      },
-      {
-        "id": "hager",
-        "label": "Hager",
-        "next": "F-070",
-        "set": {
-          "brand": "Hager"
-        }
-      },
-      {
-        "id": "schneider-charge",
-        "label": "Schneider Charge",
-        "next": "F-082",
-        "set": {
-          "brand": "Schneider Charge",
-          "model": "Schneider Charge"
-        }
-      },
-      {
-        "id": "schneider-charge-pro",
-        "label": "Schneider Charge Pro",
-        "next": "F-098",
-        "set": {
-          "brand": "Schneider Charge Pro",
-          "model": "Schneider Charge Pro"
-        }
-      }
+      { "id": "vestel", "label": "Vestel IZI by EDF", "next": "F-011", "set": { "brand": "Vestel IZI by EDF" } },
+      { "id": "wallbox", "label": "Wallbox", "next": "F-027", "set": { "brand": "Wallbox" } },
+      { "id": "free2move", "label": "Free2Move", "next": "F-054", "set": { "brand": "Free2Move", "model": "eProWallbox" } },
+      { "id": "hager", "label": "Hager", "next": "F-070", "set": { "brand": "Hager" } },
+      { "id": "schneider-charge", "label": "Schneider Charge", "next": "F-082", "set": { "brand": "Schneider Charge", "model": "Schneider Charge" } },
+      { "id": "schneider-charge-pro", "label": "Schneider Charge Pro", "next": "F-098", "set": { "brand": "Schneider Charge Pro", "model": "Schneider Charge Pro" } }
     ]
   },
   {
@@ -328,11 +218,7 @@
     "source": "Forms actuel",
     "validation": "a_valider",
     "answers": [
-      {
-        "id": "continue",
-        "label": "Continuer vers le statut final",
-        "next": "F-107"
-      }
+      { "id": "continue", "label": "Continuer vers le statut final", "next": "F-107" }
     ]
   },
   {
@@ -343,54 +229,15 @@
     "source": "Forms actuel",
     "validation": "a_valider",
     "answers": [
-      {
-        "id": "transfer",
-        "label": "Oui > Je transmets les copies d'écran demandées",
-        "next": "END-TRANSFER",
-        "check": "Transmission au Service Technique"
-      },
-      {
-        "id": "resolved",
-        "label": "Non > J'ai résolu le problème avec ce support.",
-        "next": "END-RESOLVED",
-        "check": "Problème résolu avec le support"
-      },
-      {
-        "id": "waiting",
-        "label": "Je laisse ma demande en attente de réception des éléments demandés.",
-        "next": "END-WAITING",
-        "check": "En attente de réception des éléments demandés"
-      }
+      { "id": "transfer", "label": "Oui > Je transmets les copies d'écran demandées", "next": "END-TRANSFER", "check": "Transmission au Service Technique" },
+      { "id": "resolved", "label": "Non > J'ai résolu le problème avec ce support.", "next": "END-RESOLVED", "check": "Problème résolu avec le support" },
+      { "id": "waiting", "label": "Je laisse ma demande en attente de réception des éléments demandés.", "next": "END-WAITING", "check": "En attente de réception des éléments demandés" }
     ]
   },
-  {
-    "id": "END-RESOLVED",
-    "type": "conclusion",
-    "conclusionId": "RESOLVED_CA"
-  },
-  {
-    "id": "END-TRANSFER",
-    "type": "conclusion",
-    "conclusionId": "TRANSFER_TECH"
-  },
-  {
-    "id": "END-WAITING",
-    "type": "conclusion",
-    "conclusionId": "WAITING_ELEMENTS"
-  },
-  {
-    "id": "END-REINTERVENTION",
-    "type": "conclusion",
-    "conclusionId": "REINTERVENTION_PRO"
-  },
-  {
-    "id": "END-INFO",
-    "type": "conclusion",
-    "conclusionId": "INFO_ONLY"
-  },
-  {
-    "id": "END-ENERGY-SUPPLIER",
-    "type": "conclusion",
-    "conclusionId": "ENERGY_SUPPLIER"
-  }
+  { "id": "END-RESOLVED", "type": "conclusion", "conclusionId": "RESOLVED_CA" },
+  { "id": "END-TRANSFER", "type": "conclusion", "conclusionId": "TRANSFER_TECH" },
+  { "id": "END-WAITING", "type": "conclusion", "conclusionId": "WAITING_ELEMENTS" },
+  { "id": "END-REINTERVENTION", "type": "conclusion", "conclusionId": "REINTERVENTION_PRO" },
+  { "id": "END-INFO", "type": "conclusion", "conclusionId": "INFO_ONLY" },
+  { "id": "END-ENERGY-SUPPLIER", "type": "conclusion", "conclusionId": "ENERGY_SUPPLIER" }
 ]
