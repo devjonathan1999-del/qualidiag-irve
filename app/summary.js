@@ -7,7 +7,8 @@ export function buildSalesforceSummary(session, conclusion = {}) {
     ['Non-conformité AC', context['autocontrol.nonConformity']],
     ['Borne', context.brand],
     ['Modèle', context.model],
-    ['Symptôme', context.symptom]
+    ['Symptôme', context.symptom],
+    ['Informations complémentaires', context['final.additionalInfo']]
   ];
 
   for (const [label, value] of fields) {
