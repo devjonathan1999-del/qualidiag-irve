@@ -1,0 +1,87 @@
+{
+  "nodes": {
+    "F-096": {
+      "type": "question",
+      "title": "Quel message exact est affiché dans Wiser ?",
+      "body": "Sélectionnez le message affiché dans l’application Wiser.",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "not-available",
+          "label": "Votre Schneider Charge n’est pas disponible",
+          "next": "F-091",
+          "check": "Wiser croix rouge — Schneider Charge non disponible, renvoi vers connectivité"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Veuillez essayer de configurer à nouveau le Schneider Charge",
+          "next": "SC-WISER-RECONFIGURE",
+          "check": "Wiser croix rouge — demande de nouvelle configuration"
+        },
+        {
+          "id": "other",
+          "label": "Autre problème avec l’application Wiser",
+          "next": "SC-WISER-OTHER",
+          "check": "Wiser croix rouge — autre problème Wiser"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "SC-WISER-RECONFIGURE",
+      "type": "action",
+      "title": "Refaire l’association dans Wiser",
+      "body": "Demandez au client de refaire l’association de la borne dans Wiser.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "association-done",
+          "label": "L’association a été refaite",
+          "next": "SC-WISER-RECONFIGURE-RESULT",
+          "check": "Wiser — nouvelle association effectuée"
+        }
+      ]
+    },
+    {
+      "id": "SC-WISER-RECONFIGURE-RESULT",
+      "type": "question",
+      "title": "La borne apparaît-elle de nouveau normalement dans Wiser ?",
+      "body": "Vérifiez si la Schneider Charge est de nouveau visible et disponible dans l’application Wiser.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "visible",
+          "label": "Oui, la borne apparaît normalement",
+          "next": "END-RESOLVED",
+          "check": "Wiser — borne de nouveau visible après association"
+        },
+        {
+          "id": "still-missing",
+          "label": "Non, le problème persiste",
+          "next": "END-TRANSFER",
+          "check": "Wiser — problème persistant après nouvelle association, transmission Service Technique avec message affiché"
+        }
+      ]
+    },
+    {
+      "id": "SC-WISER-OTHER",
+      "type": "action",
+      "title": "Récupérer une capture Wiser",
+      "body": "Demandez une capture d’écran du message ou du comportement rencontré dans Wiser avant de transmettre le dossier au Service Technique.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "capture-collected",
+          "label": "J’ai récupéré la capture d’écran",
+          "next": "END-TRANSFER",
+          "check": "Wiser — capture d’écran récupérée, transmission Service Technique"
+        }
+      ]
+    }
+  ]
+}
