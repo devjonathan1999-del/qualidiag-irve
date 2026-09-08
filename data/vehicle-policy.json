@@ -1,0 +1,24 @@
+{
+  "nodes": {
+    "Q-VEHICLE": {
+      "title": "Quel est le modèle du VE du client ?",
+      "body": "",
+      "source": "Forms actuel + validation métier",
+      "validation": "valide",
+      "input": {
+        "type": "text",
+        "key": "vehicle.model",
+        "label": "Modèle du VE (optionnel)",
+        "placeholder": "Ex. Tesla Model Y, Renault Mégane E-Tech…",
+        "required": false
+      },
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Continuer",
+          "next": "Q-BRAND"
+        }
+      ]
+    }
+  }
+}

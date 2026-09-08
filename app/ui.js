@@ -38,6 +38,13 @@ function inputMarkup(input) {
   if (!input) return '';
   const required = input.required ? ' required' : '';
   const placeholder = input.placeholder ? ` placeholder="${escapeHtml(input.placeholder)}"` : '';
+  if (input.type === 'text') {
+    return `<div class="field-group">
+      <label class="field-label" for="qualidiag-input">${escapeHtml(input.label ?? 'Information')}</label>
+      <input id="qualidiag-input" class="field-input" type="text" data-input data-input-key="${escapeHtml(input.key)}" value="${escapeHtml(input.value ?? '')}"${required}${placeholder}>
+      <p class="field-error" data-input-error aria-live="polite"></p>
+    </div>`;
+  }
   if (input.type === 'textarea') {
     return `<div class="field-group">
       <label class="field-label" for="qualidiag-input">${escapeHtml(input.label ?? 'Complément')}</label>
