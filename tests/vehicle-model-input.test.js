@@ -63,3 +63,10 @@ test('le résumé Salesforce ajoute le véhicule uniquement lorsqu’il est rens
   });
   assert.doesNotMatch(withoutVehicle, /Véhicule :/);
 });
+
+test('l’UI sait rendre un champ texte libre', async () => {
+  const source = await readFile(new URL('../app/ui.js', import.meta.url), 'utf8');
+  assert.match(source, /input\.type === 'text'/);
+  assert.match(source, /type="text"/);
+  assert.match(source, /data-input-key/);
+});
