@@ -1,0 +1,92 @@
+{
+  "nodes": {
+    "SC-ORANGE-WIFI-WISER": {
+      "answers": [
+        {
+          "id": "conform",
+          "label": "Oui, 2,4 GHz et signal ≥ -65 dBm",
+          "next": "SC-WIFI-ATTACH-WISER",
+          "check": "LED orange clignotante — Wi-Fi conforme, poursuite branche Wiser"
+        },
+        {
+          "id": "not-conform",
+          "label": "Non, test absent ou non conforme",
+          "next": "SC-WIFI-ATTACH-REINTERVENTION",
+          "check": "LED orange clignotante — Wi-Fi absent ou non conforme, réintervention professionnel"
+        }
+      ]
+    },
+    "SC-ORANGE-WIFI-SMARTCHARGE": {
+      "answers": [
+        {
+          "id": "conform",
+          "label": "Oui, 2,4 GHz et signal ≥ -65 dBm",
+          "next": "SC-WIFI-ATTACH-SMARTCHARGE",
+          "check": "LED orange clignotante — Wi-Fi conforme, transmission Service Technique"
+        },
+        {
+          "id": "not-conform",
+          "label": "Non, test absent ou non conforme",
+          "next": "SC-WIFI-ATTACH-REINTERVENTION",
+          "check": "LED orange clignotante — Wi-Fi absent ou non conforme, réintervention professionnel"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "SC-WIFI-ATTACH-WISER",
+      "type": "action",
+      "title": "⚠️ Test Wi-Fi à fournir",
+      "body": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Continuer",
+          "next": "F-096",
+          "set": {
+            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SC-WIFI-ATTACH-SMARTCHARGE",
+      "type": "action",
+      "title": "⚠️ Test Wi-Fi à fournir",
+      "body": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Continuer",
+          "next": "END-TRANSFER",
+          "set": {
+            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SC-WIFI-ATTACH-REINTERVENTION",
+      "type": "action",
+      "title": "⚠️ Test Wi-Fi à fournir",
+      "body": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Continuer",
+          "next": "END-REINTERVENTION",
+          "set": {
+            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
+          }
+        }
+      ]
+    }
+  ]
+}

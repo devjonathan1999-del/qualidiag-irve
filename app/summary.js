@@ -18,6 +18,10 @@ export function buildSalesforceSummary(session, conclusion = {}) {
     if (value) lines.push(`${label} : ${value}`);
   }
 
+  if (context['attachments.wifiTest']) {
+    lines.push('', context['attachments.wifiTest']);
+  }
+
   const checks = Array.isArray(session?.checks) ? session.checks.filter(Boolean) : [];
   if (checks.length) {
     lines.push('', 'Vérifications réalisées :');

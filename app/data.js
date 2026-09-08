@@ -18,6 +18,7 @@ const DATA_FILES = {
   schneiderChargePolicy: 'schneider-charge-policy.json',
   schneiderWiserPolicy: 'schneider-wiser-policy.json',
   schneiderSmartchargePolicy: 'schneider-smartcharge-policy.json',
+  schneiderWifiAttachmentPolicy: 'schneider-wifi-attachment-policy.json',
   schneiderChargeProPolicy: 'schneider-charge-pro-policy.json',
   procedures: 'procedures.json',
   conclusions: 'conclusions.json',
@@ -158,6 +159,7 @@ export async function loadData(baseUrl = '../data/') {
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderChargePolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderWiserPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderSmartchargePolicy);
+  data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderWifiAttachmentPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderChargeProPolicy);
   data.nodes = applyFinalNotePolicy(data.nodes);
   return data;
