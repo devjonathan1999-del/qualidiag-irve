@@ -7,6 +7,7 @@ export function buildSalesforceSummary(session, conclusion = {}) {
     ['Autocontrôle inexploitable', context['autocontrol.unusableReason']],
     ['Réintervention', context['autocontrol.reintervention']],
     ['Non-conformité AC', context['autocontrol.nonConformity']],
+    ['Véhicule', context['vehicle.model']],
     ['Borne', context.brand],
     ['Modèle', context.model],
     ['Symptôme', context.symptom],
