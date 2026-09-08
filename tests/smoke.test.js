@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const root = new URL('../', import.meta.url);
-const CACHE_VERSION = '20260908-2';
+const CACHE_VERSION = '20260908-3';
 
 test('index charge le CSS et le module principal avec une version de cache', async () => {
   const html = await readFile(new URL('index.html', root), 'utf8');
