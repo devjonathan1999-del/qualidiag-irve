@@ -1,13 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { applySchneiderChargePolicy } from '../app/data.js';
 import { toViewModel } from '../app/presenter.js';
 import { createSession, recordAnswer } from '../app/session.js';
 import { buildSalesforceSummary } from '../app/summary.js';
 
 test('la question véhicule devient un champ libre optionnel', async () => {
-  const nodes = JSON.parse(await readFile(new URL('../data/diagnostics/common.json', import.meta.url), 'utf8'));
-  const node = nodes.find(item => item.id === 'Q-VEHICLE');
+  const policy = JSON.parse(await readFile(new URL('../data/vehicle-policy.json', import.meta.url), 'utf8'));
+  const [node] = applySchneiderChargePolicy([{
+    id: 'Q-VEHICLE',
+    type: 'question',
+    title: 'Souhaitez-vous renseigner le véhicule ?',
+    answers: [
+      { id: 'note', label: 'Oui, je le préciserai dans le complément', next: 'Q-BRAND' },
+      { id: 'skip', label: 'Passer', next: 'Q-BRAND' }
+    ]
+  }], policy);
 
   assert.equal(node.title, 'Quel est le modèle du VE du client ?');
   assert.equal(node.input.type, 'text');
