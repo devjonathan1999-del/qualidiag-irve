@@ -23,42 +23,69 @@ function copyText(text, statusElement) {
 }
 
 function conclusionById(id) {
-  return data.conclusions.find(item => item.id === id);
+  return data?.conclusions?.find(item => item.id === id) ?? { title: 'Transmission Service Technique' };
 }
 
-function refresh() {
-  const node = getNode(graph, session.currentNodeId);
-  const view = toViewModel(node, session, {
-    canGoBack: session.history.length > 0,
-    conclusions: data.conclusions
-  });
-  render(root, view, {
-    onAnswer(answerId, inputValue) {
-      session = recordAnswer(graph, session, answerId, inputValue);
-      saveDraft(session);
-      refresh();
-    },
-    onBack() {
-      session = goBack(session);
-      saveDraft(session);
-      refresh();
-    },
-    onRestart() {
-      clearDraft();
-      session = restartSession(data.startNodeId ?? 'START');
-      saveDraft(session);
-      refresh();
-    },
-    onCopy(summary, statusElement) {
-      copyText(summary, statusElement);
-    }
-  });
+function showGraphError(error) {
+  console.error(error);
+  const partial = buildSalesforceSummary(session ?? { context: {}, checks: [] }, conclusionById('TRANSFER_TECH'));
+  renderGraphError(root, partial, { onCopySummary: copyText, onRestart: restart });
 }
 
-function startNew() {
-  session = createSession(data.startNodeId ?? 'START');
-  saveDraft(session);
-  refresh();
+function restart() {
+  clearDraft(localStorage);
+  session = restartSession('START');
+  renderCurrent();
+}
+
+function renderCurrent() {
+  try {
+    const node = getNode(graph, session.currentNodeId);
+    const viewModel = toViewModel(node, session, data);
+    render(root, viewModel, {
+      onAnswer(answerId, fieldSet = {}) {
+        try {
+          const result = resolveAnswer(graph, session.currentNodeId, answerId);
+          session = recordAnswer(session, result.node, result.answer, fieldSet);
+          saveDraft(localStorage, session);
+          renderCurrent();
+        } catch (error) {
+          if (error instanceof GraphError) showGraphError(error);
+          else throw error;
+        }
+      },
+      onBack() {
+        session = goBack(session);
+        saveDraft(localStorage, session);
+        renderCurrent();
+      },
+      onRestart: restart,
+      onCopySummary: copyText
+    });
+  } catch (error) {
+    if (error instanceof GraphError) showGraphError(error);
+    else throw error;
+  }
+}
+
+function offerDraftOrStart() {
+  const draft = loadDraft(localStorage);
+  if (draft?.currentNodeId) {
+    renderDraftPrompt(root, draft, {
+      onResumeDraft() {
+        session = draft;
+        renderCurrent();
+      },
+      onDiscardDraft() {
+        clearDraft(localStorage);
+        session = createSession('START');
+        renderCurrent();
+      }
+    });
+    return;
+  }
+  session = createSession('START');
+  renderCurrent();
 }
 
 async function bootstrap() {
@@ -70,27 +97,9 @@ async function bootstrap() {
       return;
     }
     graph = buildGraph(data.nodes);
-    const draft = loadDraft();
-    if (draft?.currentNodeId && graph.has(draft.currentNodeId)) {
-      renderDraftPrompt(root, {
-        onResume() {
-          session = draft;
-          refresh();
-        },
-        onRestart() {
-          clearDraft();
-          startNew();
-        }
-      });
-      return;
-    }
-    startNew();
+    offerDraftOrStart();
   } catch (error) {
-    if (error instanceof GraphError) {
-      renderGraphError(root, error);
-      return;
-    }
-    renderFatalDataError(root, [error.message ?? String(error)]);
+    renderFatalDataError(root, [error?.message ?? String(error)]);
   }
 }
 
