@@ -57,14 +57,14 @@ test('Vestel BASIC LED rouge fixe qualifie le résultat après redémarrage', as
 
   const chargeTest = data.nodes.find(node => node.id === 'VESTEL-BASIC-RED-CHARGE-TEST');
   assert.ok(chargeTest);
-  assert.equal(chargeTest.answers.find(answer => answer.id === 'charge-ok').next, 'END-RESOLVED');
-  assert.equal(chargeTest.answers.find(answer => answer.id === 'charge-ko').next, 'END-TRANSFER');
+  assert.equal(chargeTest.answers.find(answer => answer.id === 'charge-ok').next, 'FINAL-NOTE-END-RESOLVED');
+  assert.equal(chargeTest.answers.find(answer => answer.id === 'charge-ko').next, 'FINAL-NOTE-END-TRANSFER');
 
   const context = data.nodes.find(node => node.id === 'VESTEL-BASIC-RED-VE-CONTEXT');
   assert.ok(context);
   assert.match(context.title, /avec ou sans.*véhicule/i);
   assert.deepEqual(context.answers.map(answer => answer.id), ['with-vehicle', 'without-vehicle', 'both']);
   for (const answer of context.answers) {
-    assert.equal(answer.next, 'END-TRANSFER');
+    assert.equal(answer.next, 'FINAL-NOTE-END-TRANSFER');
   }
 });
