@@ -31,6 +31,7 @@ test('Vestel BASIC offpeak checks vehicle schedule before contract change', asyn
   assert.ok(schedule);
   assert.match(schedule.body, /TIC/i);
   assert.match(schedule.body, /programmation.*véhicule/i);
+  assert.match(schedule.body, /pas compatible|incompatible/i);
   assert.equal(schedule.answers.find(answer => answer.id === 'active').next, 'VESTEL-BASIC-OFFPEAK-DISABLE-SCHEDULE');
   assert.equal(schedule.answers.find(answer => answer.id === 'none').next, 'VESTEL-BASIC-OFFPEAK-CONTRACT-CHANGE');
 });
