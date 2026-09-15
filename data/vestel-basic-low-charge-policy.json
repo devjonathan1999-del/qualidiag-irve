@@ -1,78 +1,10 @@
 {
   "nodes": {
     "F-013": {
-      "answers": [
-        {
-          "id": "led-rouge",
-          "label": "LED Rouge",
-          "next": "VESTEL-BASIC-RED-RESET",
-          "check": "Quel est le problème rencontré avec votre borne BASIC ? — LED Rouge",
-          "set": {
-            "symptom": "LED Rouge"
-          }
-        },
-        {
-          "id": "led-violet-fixe",
-          "label": "LED Violet fixe",
-          "next": "VESTEL-BASIC-VIOLET-REDUCE-LOAD",
-          "check": "Quel est le problème rencontré avec votre borne BASIC ? — LED Violet fixe",
-          "set": {
-            "symptom": "LED Violet fixe"
-          }
-        },
-        {
-          "id": "led-clignote-rouge-et-bleu",
-          "label": "LED clignote rouge et bleu",
-          "next": "VESTEL-BASIC-RB-BADGE-TEST",
-          "check": "Quel est le problème rencontré avec votre borne BASIC ? — LED clignote rouge et bleu",
-          "set": {
-            "symptom": "LED clignote rouge et bleu"
-          }
-        },
-        {
-          "id": "installation-disjoncte",
-          "label": "Installation disjoncte",
-          "next": "VESTEL-BASIC-TRIP-DEVICE",
-          "check": "Quel est le problème rencontré avec votre borne BASIC ? — Installation disjoncte",
-          "set": {
-            "symptom": "Installation disjoncte"
-          }
-        },
+      "answerOverrides": [
         {
           "id": "charge-faible",
-          "label": "Charge faible",
-          "next": "VESTEL-BASIC-LOW-CABLE",
-          "check": "Quel est le problème rencontré avec votre borne BASIC ? — Charge faible",
-          "set": {
-            "symptom": "Charge faible"
-          }
-        },
-        {
-          "id": "ma-charge-ne-se-lance-pas-pendant-mes-heur",
-          "label": "Ma charge ne se lance pas pendant mes heures creuses",
-          "next": "F-014",
-          "check": "Quel est le problème rencontré avec votre borne BASIC ? — Ma charge ne se lance pas pendant mes heures creuses",
-          "set": {
-            "symptom": "Ma charge ne se lance pas pendant mes heures creuses"
-          }
-        },
-        {
-          "id": "badge-rfid",
-          "label": "Badge RFID",
-          "next": "F-026",
-          "check": "Quel est le problème rencontré avec votre borne BASIC ? — Badge RFID",
-          "set": {
-            "symptom": "Badge RFID"
-          }
-        },
-        {
-          "id": "autre",
-          "label": "Autre",
-          "next": "F-106",
-          "check": "Quel est le problème rencontré avec votre borne BASIC ? — Autre",
-          "set": {
-            "symptom": "Autre"
-          }
+          "next": "VESTEL-BASIC-LOW-CABLE"
         }
       ]
     }
