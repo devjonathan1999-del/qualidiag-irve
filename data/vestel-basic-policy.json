@@ -23,7 +23,7 @@
         {
           "id": "led-clignote-rouge-et-bleu",
           "label": "LED clignote rouge et bleu",
-          "next": "F-023",
+          "next": "VESTEL-BASIC-RB-BADGE-TEST",
           "check": "Quel est le problème rencontré avec votre borne BASIC ? — LED clignote rouge et bleu",
           "set": {
             "symptom": "LED clignote rouge et bleu"
@@ -224,6 +224,108 @@
           "label": "Dans les deux cas",
           "next": "END-TRANSFER",
           "check": "Vestel BASIC violet fixe — défaut avec et sans véhicule branché"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RB-BADGE-TEST",
+      "type": "question",
+      "title": "Tester une charge immédiate avec le badge RFID utilisateur",
+      "body": "Le clignotement rouge et bleu indique que la borne attend les heures creuses. Demandez au client de présenter le badge RFID utilisateur pour forcer une charge immédiate. Ne pas utiliser la carte Master.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "charging",
+          "label": "La charge démarre",
+          "next": "END-RESOLVED",
+          "check": "Vestel BASIC rouge et bleu clignotant — charge immédiate démarrée avec le badge RFID utilisateur"
+        },
+        {
+          "id": "not-charging",
+          "label": "La charge ne démarre pas",
+          "next": "VESTEL-BASIC-RB-VE-SCHEDULE",
+          "check": "Vestel BASIC rouge et bleu clignotant — charge non démarrée avec le badge RFID utilisateur"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RB-VE-SCHEDULE",
+      "type": "question",
+      "title": "Une planification est-elle active dans le véhicule ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "active",
+          "label": "Oui, une planification est active",
+          "next": "VESTEL-BASIC-RB-DISABLE-SCHEDULE",
+          "check": "Vestel BASIC rouge et bleu clignotant — planification active côté véhicule"
+        },
+        {
+          "id": "none",
+          "label": "Non, aucune planification côté véhicule",
+          "next": "VESTEL-BASIC-RB-CONTRACT-CHANGE",
+          "check": "Vestel BASIC rouge et bleu clignotant — aucune planification côté véhicule"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RB-DISABLE-SCHEDULE",
+      "type": "action",
+      "title": "Désactiver temporairement la planification du véhicule",
+      "body": "Demandez au client de désactiver temporairement la planification côté véhicule, puis de refaire un essai de charge.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "continue",
+          "label": "La planification est désactivée, refaire l’essai",
+          "next": "VESTEL-BASIC-RB-RETRY",
+          "check": "Vestel BASIC rouge et bleu clignotant — planification véhicule désactivée temporairement"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RB-RETRY",
+      "type": "question",
+      "title": "La charge démarre-t-elle après désactivation de la planification ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "charging",
+          "label": "Oui, la charge démarre",
+          "next": "END-RESOLVED",
+          "check": "Vestel BASIC rouge et bleu clignotant — charge démarrée après désactivation de la planification véhicule"
+        },
+        {
+          "id": "not-charging",
+          "label": "Non, la charge ne démarre toujours pas",
+          "next": "VESTEL-BASIC-RB-CONTRACT-CHANGE",
+          "check": "Vestel BASIC rouge et bleu clignotant — défaut persistant après désactivation de la planification véhicule"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RB-CONTRACT-CHANGE",
+      "type": "question",
+      "title": "Le client a-t-il récemment changé de contrat ou de puissance ?",
+      "body": "Collectez cette information avant transmission au Service Technique. QualiDiag ne conclut pas automatiquement sur la compatibilité du nouveau contrat.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "yes",
+          "label": "Oui",
+          "next": "END-TRANSFER",
+          "check": "Vestel BASIC rouge et bleu clignotant — changement récent de contrat ou de puissance signalé, transmission Service Technique"
+        },
+        {
+          "id": "no",
+          "label": "Non",
+          "next": "END-TRANSFER",
+          "check": "Vestel BASIC rouge et bleu clignotant — aucun changement récent de contrat ou de puissance, transmission Service Technique"
         }
       ]
     }
