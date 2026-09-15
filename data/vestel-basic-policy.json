@@ -14,7 +14,7 @@
         {
           "id": "led-violet-fixe",
           "label": "LED Violet fixe",
-          "next": "F-021",
+          "next": "VESTEL-BASIC-VIOLET-REDUCE-LOAD",
           "check": "Quel est le problème rencontré avec votre borne BASIC ? — LED Violet fixe",
           "set": {
             "symptom": "LED Violet fixe"
@@ -160,6 +160,70 @@
           "label": "Dans les deux cas",
           "next": "END-TRANSFER",
           "check": "Vestel BASIC LED rouge fixe — défaut avec et sans véhicule branché"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-VIOLET-REDUCE-LOAD",
+      "type": "action",
+      "title": "Réduire temporairement la consommation du logement",
+      "body": "Demandez au client de réduire temporairement les gros consommateurs du logement, puis de refaire un essai de charge.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "continue",
+          "label": "L’essai a été réalisé",
+          "next": "VESTEL-BASIC-VIOLET-RESULT",
+          "check": "Vestel BASIC violet fixe — essai réalisé avec consommation du logement réduite"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-VIOLET-RESULT",
+      "type": "question",
+      "title": "Quel est le résultat du nouvel essai ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "charging",
+          "label": "La borne quitte le violet et la charge démarre",
+          "next": "END-RESOLVED",
+          "check": "Vestel BASIC violet fixe — charge démarrée après réduction de la consommation ; puissance disponible insuffisante auparavant"
+        },
+        {
+          "id": "still-violet",
+          "label": "La borne reste violet fixe",
+          "next": "VESTEL-BASIC-VIOLET-VE-CONTEXT",
+          "check": "Vestel BASIC violet fixe — défaut persistant après réduction de la consommation"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-VIOLET-VE-CONTEXT",
+      "type": "question",
+      "title": "La LED violet fixe apparaît-elle avec ou sans véhicule branché ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "with-vehicle",
+          "label": "Avec le véhicule branché",
+          "next": "END-TRANSFER",
+          "check": "Vestel BASIC violet fixe — défaut avec véhicule branché"
+        },
+        {
+          "id": "without-vehicle",
+          "label": "Sans véhicule branché",
+          "next": "END-TRANSFER",
+          "check": "Vestel BASIC violet fixe — défaut sans véhicule branché"
+        },
+        {
+          "id": "both",
+          "label": "Dans les deux cas",
+          "next": "END-TRANSFER",
+          "check": "Vestel BASIC violet fixe — défaut avec et sans véhicule branché"
         }
       ]
     }
