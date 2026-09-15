@@ -41,6 +41,7 @@ test('enregistrement et retrait utilisent la carte Master puis le badge utilisat
   assert.match(register.body, /carte (RFID )?Master/i);
   assert.match(register.body, /10 secondes/i);
   assert.match(register.body, /voyant vert/i);
+  assert.match(register.body, /une seule carte/i);
   assert.equal(register.answers.find(answer => answer.id === 'success').next, 'FINAL-NOTE-END-RESOLVED');
   assert.equal(register.answers.find(answer => answer.id === 'failure').next, 'VESTEL-BASIC-RFID-READER-TEST');
 
@@ -48,6 +49,7 @@ test('enregistrement et retrait utilisent la carte Master puis le badge utilisat
   assert.match(remove.body, /carte (RFID )?Master/i);
   assert.match(remove.body, /10 secondes/i);
   assert.match(remove.body, /voyant rouge/i);
+  assert.match(remove.body, /une seule carte/i);
   assert.equal(remove.answers.find(answer => answer.id === 'success').next, 'FINAL-NOTE-END-RESOLVED');
   assert.equal(remove.answers.find(answer => answer.id === 'failure').next, 'VESTEL-BASIC-RFID-READER-TEST');
 });
