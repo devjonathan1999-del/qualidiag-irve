@@ -51,7 +51,7 @@ test('enregistrement et retrait utilisent la carte Master puis le badge utilisat
   assert.match(remove.body, /voyant rouge/i);
   assert.match(remove.body, /une seule carte/i);
   assert.equal(remove.answers.find(answer => answer.id === 'success').next, 'FINAL-NOTE-END-RESOLVED');
-  assert.equal(remove.answers.find(answer => answer.id === 'failure').next, 'VESTEL-BASIC-RFID-READER-TEST');
+  assert.equal(remove.answers.find(answer => answer.id === 'failure').next, 'VESTEL-BASIC-RFID-REMOVE-READER-TEST');
 });
 
 test('le diagnostic lecteur utilise la carte Master comme test de référence', async () => {
@@ -61,6 +61,15 @@ test('le diagnostic lecteur utilise la carte Master comme test de référence', 
   assert.match(reader.body, /carte (RFID )?Master/i);
   assert.match(reader.body, /BIP|voyant/i);
   assert.equal(reader.answers.find(answer => answer.id === 'reacts').next, 'VESTEL-BASIC-RFID-REPAIR-USER-BADGE');
+  assert.equal(reader.answers.find(answer => answer.id === 'no-reaction').next, 'VESTEL-BASIC-RFID-SECOND-BADGE');
+});
+
+test('un échec de retrait ne propose jamais de réenregistrer le badge', async () => {
+  const data = await localData();
+  const reader = data.nodes.find(node => node.id === 'VESTEL-BASIC-RFID-REMOVE-READER-TEST');
+  assert.ok(reader);
+  assert.match(reader.body, /carte (RFID )?Master/i);
+  assert.equal(reader.answers.find(answer => answer.id === 'reacts').next, 'FINAL-NOTE-END-TRANSFER');
   assert.equal(reader.answers.find(answer => answer.id === 'no-reaction').next, 'VESTEL-BASIC-RFID-SECOND-BADGE');
 });
 
