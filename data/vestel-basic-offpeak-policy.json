@@ -14,7 +14,7 @@
       "id": "VESTEL-BASIC-OFFPEAK-VE-SCHEDULE",
       "type": "question",
       "title": "Une programmation est-elle active côté véhicule ?",
-      "body": "Rappel : sur une borne pilotée par la TIC, une programmation côté véhicule peut entrer en conflit avec le lancement de la charge en heures creuses.",
+      "body": "Rappel : une programmation côté véhicule n’est pas compatible avec le fonctionnement TIC de la borne. Les deux programmations peuvent entrer en conflit et empêcher le lancement de la charge en heures creuses.",
       "source": "Validation métier",
       "validation": "valide",
       "answers": [
