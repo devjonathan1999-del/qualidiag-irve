@@ -33,7 +33,10 @@ test('Vestel BASIC rouge et bleu clignotant commence par un essai au badge RFID 
   assert.ok(badge);
   assert.match(badge.body, /heure[s]? creuse/i);
   assert.match(badge.body, /badge RFID utilisateur/i);
-  assert.match(badge.body, /Master/i);
+  assert.match(badge.body, /Point de vigilance/i);
+  assert.match(badge.body, /carte Master/i);
+  assert.match(badge.body, /Pas de programme de charge côté véhicule/i);
+  assert.match(badge.body, /Cela a-t-il résolu votre problème \?/i);
   assert.equal(badge.validation, 'valide');
   assert.equal(badge.answers.find(answer => answer.id === 'charging').next, 'FINAL-NOTE-END-RESOLVED');
   assert.equal(badge.answers.find(answer => answer.id === 'not-charging').next, 'VESTEL-BASIC-RB-VE-SCHEDULE');
