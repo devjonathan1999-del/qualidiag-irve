@@ -231,7 +231,7 @@
       "id": "VESTEL-BASIC-RB-BADGE-TEST",
       "type": "question",
       "title": "Tester une charge immédiate avec le badge RFID utilisateur",
-      "body": "Le clignotement rouge et bleu indique que la borne attend les heures creuses. Demandez au client de présenter le badge RFID utilisateur pour forcer une charge immédiate. Ne pas utiliser la carte Master.",
+      "body": "La borne est en attente de passage en heure creuse afin de charger au meilleur coût 💡. Il est possible de forcer la charge en heure pleine en badgeant avec la carte RFID utilisateur qui a été fournie.\n\nPoint de vigilance :\n- Veillez à ne pas utiliser la carte Master\n- Pas de programme de charge côté véhicule\n\nCela a-t-il résolu votre problème ?",
       "source": "Validation métier",
       "validation": "valide",
       "answers": [
