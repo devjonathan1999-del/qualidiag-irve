@@ -84,12 +84,32 @@ export function applySchneiderChargePolicy(nodes = [], policy = {}) {
   const output = nodes.map(node => {
     const override = overrides[node.id];
     if (!override) return node;
+
+    const { answerOverrides, ...nodeOverride } = override;
+    let answers = Array.isArray(node.answers)
+      ? node.answers.map(answer => ({ ...answer }))
+      : node.answers;
+
+    if (Array.isArray(nodeOverride.answers)) {
+      answers = nodeOverride.answers.map(answer => ({ ...answer }));
+    }
+
+    if (Array.isArray(answerOverrides) && Array.isArray(answers)) {
+      const byId = new Map(
+        answerOverrides
+          .filter(answer => answer?.id)
+          .map(answer => [answer.id, answer])
+      );
+      answers = answers.map(answer => {
+        const answerOverride = byId.get(answer.id);
+        return answerOverride ? { ...answer, ...answerOverride } : answer;
+      });
+    }
+
     return {
       ...node,
-      ...override,
-      answers: Array.isArray(override.answers)
-        ? override.answers.map(answer => ({ ...answer }))
-        : node.answers
+      ...nodeOverride,
+      answers
     };
   });
 
