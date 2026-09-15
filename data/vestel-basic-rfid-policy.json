@@ -43,7 +43,7 @@
       "validation": "valide",
       "answers": [
         {"id":"success","label":"Le badge est retiré","next":"END-RESOLVED","check":"Vestel BASIC RFID — badge utilisateur retiré"},
-        {"id":"failure","label":"Le retrait ne fonctionne pas","next":"VESTEL-BASIC-RFID-READER-TEST","check":"Vestel BASIC RFID — échec de retrait, contrôle du lecteur"}
+        {"id":"failure","label":"Le retrait ne fonctionne pas","next":"VESTEL-BASIC-RFID-REMOVE-READER-TEST","check":"Vestel BASIC RFID — échec de retrait, contrôle du lecteur"}
       ]
     },
     {
@@ -56,6 +56,18 @@
       "answers": [
         {"id":"reacts","label":"Oui, la borne réagit","next":"VESTEL-BASIC-RFID-REPAIR-USER-BADGE","check":"Vestel BASIC RFID — le lecteur réagit à la carte Master"},
         {"id":"no-reaction","label":"Non, aucune réaction","next":"VESTEL-BASIC-RFID-SECOND-BADGE","check":"Vestel BASIC RFID — aucune réaction avec la carte Master"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RFID-REMOVE-READER-TEST",
+      "type": "question",
+      "title": "Tester le lecteur RFID avec la carte Master",
+      "body": "Présentez la carte Master sur le lecteur RFID. La borne réagit-elle avec un BIP ou un changement de voyant ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"reacts","label":"Oui, la borne réagit","next":"END-TRANSFER","check":"Vestel BASIC RFID — lecteur réactif mais retrait du badge impossible, transmission Service Technique"},
+        {"id":"no-reaction","label":"Non, aucune réaction","next":"VESTEL-BASIC-RFID-SECOND-BADGE","check":"Vestel BASIC RFID — aucune réaction avec la carte Master après échec de retrait"}
       ]
     },
     {
