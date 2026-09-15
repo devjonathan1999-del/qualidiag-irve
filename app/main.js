@@ -1,10 +1,10 @@
-import { loadData, validateData } from './data.js?v=20260908-3';
-import { buildGraph, getNode, resolveAnswer, GraphError } from './engine.js?v=20260908-3';
-import { createSession, recordAnswer, goBack, restartSession } from './session.js?v=20260908-3';
-import { saveDraft, loadDraft, clearDraft } from './storage.js?v=20260908-3';
-import { buildSalesforceSummary } from './summary.js?v=20260908-3';
-import { toViewModel } from './presenter.js?v=20260908-3';
-import { render, renderDraftPrompt, renderFatalDataError, renderGraphError } from './ui.js?v=20260908-3';
+import { loadData, validateData } from './data.js?v=20260915-1';
+import { buildGraph, getNode, resolveAnswer, GraphError } from './engine.js?v=20260915-1';
+import { createSession, recordAnswer, goBack, restartSession } from './session.js?v=20260915-1';
+import { saveDraft, loadDraft, clearDraft } from './storage.js?v=20260915-1';
+import { buildSalesforceSummary } from './summary.js?v=20260915-1';
+import { toViewModel } from './presenter.js?v=20260915-1';
+import { render, renderDraftPrompt, renderFatalDataError, renderGraphError } from './ui.js?v=20260915-1';
 
 const root = document.querySelector('#app');
 let data;
@@ -23,69 +23,42 @@ function copyText(text, statusElement) {
 }
 
 function conclusionById(id) {
-  return data?.conclusions?.find(item => item.id === id) ?? { title: 'Transmission Service Technique' };
+  return data.conclusions.find(item => item.id === id);
 }
 
-function showGraphError(error) {
-  console.error(error);
-  const partial = buildSalesforceSummary(session ?? { context: {}, checks: [] }, conclusionById('TRANSFER_TECH'));
-  renderGraphError(root, partial, { onCopySummary: copyText, onRestart: restart });
+function refresh() {
+  const node = getNode(graph, session.currentNodeId);
+  const view = toViewModel(node, session, {
+    canGoBack: session.history.length > 0,
+    conclusions: data.conclusions
+  });
+  render(root, view, {
+    onAnswer(answerId, inputValue) {
+      session = recordAnswer(graph, session, answerId, inputValue);
+      saveDraft(session);
+      refresh();
+    },
+    onBack() {
+      session = goBack(session);
+      saveDraft(session);
+      refresh();
+    },
+    onRestart() {
+      clearDraft();
+      session = restartSession(data.startNodeId ?? 'START');
+      saveDraft(session);
+      refresh();
+    },
+    onCopy(summary, statusElement) {
+      copyText(summary, statusElement);
+    }
+  });
 }
 
-function restart() {
-  clearDraft(localStorage);
-  session = restartSession('START');
-  renderCurrent();
-}
-
-function renderCurrent() {
-  try {
-    const node = getNode(graph, session.currentNodeId);
-    const viewModel = toViewModel(node, session, data);
-    render(root, viewModel, {
-      onAnswer(answerId, fieldSet = {}) {
-        try {
-          const result = resolveAnswer(graph, session.currentNodeId, answerId);
-          session = recordAnswer(session, result.node, result.answer, fieldSet);
-          saveDraft(localStorage, session);
-          renderCurrent();
-        } catch (error) {
-          if (error instanceof GraphError) showGraphError(error);
-          else throw error;
-        }
-      },
-      onBack() {
-        session = goBack(session);
-        saveDraft(localStorage, session);
-        renderCurrent();
-      },
-      onRestart: restart,
-      onCopySummary: copyText
-    });
-  } catch (error) {
-    if (error instanceof GraphError) showGraphError(error);
-    else throw error;
-  }
-}
-
-function offerDraftOrStart() {
-  const draft = loadDraft(localStorage);
-  if (draft?.currentNodeId) {
-    renderDraftPrompt(root, draft, {
-      onResumeDraft() {
-        session = draft;
-        renderCurrent();
-      },
-      onDiscardDraft() {
-        clearDraft(localStorage);
-        session = createSession('START');
-        renderCurrent();
-      }
-    });
-    return;
-  }
-  session = createSession('START');
-  renderCurrent();
+function startNew() {
+  session = createSession(data.startNodeId ?? 'START');
+  saveDraft(session);
+  refresh();
 }
 
 async function bootstrap() {
@@ -97,9 +70,27 @@ async function bootstrap() {
       return;
     }
     graph = buildGraph(data.nodes);
-    offerDraftOrStart();
+    const draft = loadDraft();
+    if (draft?.currentNodeId && graph.has(draft.currentNodeId)) {
+      renderDraftPrompt(root, {
+        onResume() {
+          session = draft;
+          refresh();
+        },
+        onRestart() {
+          clearDraft();
+          startNew();
+        }
+      });
+      return;
+    }
+    startNew();
   } catch (error) {
-    renderFatalDataError(root, [error?.message ?? String(error)]);
+    if (error instanceof GraphError) {
+      renderGraphError(root, error);
+      return;
+    }
+    renderFatalDataError(root, [error.message ?? String(error)]);
   }
 }
 
