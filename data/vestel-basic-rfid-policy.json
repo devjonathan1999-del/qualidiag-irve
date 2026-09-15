@@ -1,0 +1,97 @@
+{
+  "nodes": {
+    "F-013": {
+      "answerOverrides": [
+        {
+          "id": "badge-rfid",
+          "next": "VESTEL-BASIC-RFID-MENU"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "VESTEL-BASIC-RFID-MENU",
+      "type": "question",
+      "title": "Quel est le besoin concernant le RFID ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"register","label":"Enregistrer un badge utilisateur","next":"VESTEL-BASIC-RFID-REGISTER","check":"Vestel BASIC RFID — enregistrement d’un badge utilisateur"},
+        {"id":"remove","label":"Retirer un badge utilisateur","next":"VESTEL-BASIC-RFID-REMOVE","check":"Vestel BASIC RFID — retrait d’un badge utilisateur"},
+        {"id":"reader","label":"Le lecteur RFID ne réagit pas / ne fonctionne pas","next":"VESTEL-BASIC-RFID-READER-TEST","check":"Vestel BASIC RFID — lecteur RFID sans réaction"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RFID-REGISTER",
+      "type": "question",
+      "title": "Enregistrer un badge RFID utilisateur",
+      "body": "Présentez la carte Master sur le lecteur RFID. Dans les 10 secondes après le BIP, présentez le badge RFID utilisateur à enregistrer. L’enregistrement est validé par un BIP et l’allumage du voyant vert. Une seule carte utilisateur peut être enregistrée à la fois.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"success","label":"Le badge est enregistré","next":"END-RESOLVED","check":"Vestel BASIC RFID — badge utilisateur enregistré"},
+        {"id":"failure","label":"L’enregistrement ne fonctionne pas","next":"VESTEL-BASIC-RFID-READER-TEST","check":"Vestel BASIC RFID — échec d’enregistrement, contrôle du lecteur"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RFID-REMOVE",
+      "type": "question",
+      "title": "Retirer un badge RFID utilisateur",
+      "body": "Présentez la carte Master sur le lecteur RFID. Dans les 10 secondes après le BIP, présentez le badge RFID utilisateur à retirer. Le retrait est validé par un BIP et l’allumage du voyant rouge. Une seule carte utilisateur peut être retirée à la fois.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"success","label":"Le badge est retiré","next":"END-RESOLVED","check":"Vestel BASIC RFID — badge utilisateur retiré"},
+        {"id":"failure","label":"Le retrait ne fonctionne pas","next":"VESTEL-BASIC-RFID-READER-TEST","check":"Vestel BASIC RFID — échec de retrait, contrôle du lecteur"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RFID-READER-TEST",
+      "type": "question",
+      "title": "Tester le lecteur RFID avec la carte Master",
+      "body": "Présentez la carte Master sur le lecteur RFID. La borne réagit-elle avec un BIP ou un changement de voyant ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"reacts","label":"Oui, la borne réagit","next":"VESTEL-BASIC-RFID-REPAIR-USER-BADGE","check":"Vestel BASIC RFID — le lecteur réagit à la carte Master"},
+        {"id":"no-reaction","label":"Non, aucune réaction","next":"VESTEL-BASIC-RFID-SECOND-BADGE","check":"Vestel BASIC RFID — aucune réaction avec la carte Master"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RFID-REPAIR-USER-BADGE",
+      "type": "question",
+      "title": "Réenregistrer le badge utilisateur",
+      "body": "Le lecteur RFID réagit à la carte Master. Réenregistrez le badge utilisateur avec la procédure d’enregistrement, puis testez à nouveau son fonctionnement.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"success","label":"Le badge fonctionne après réenregistrement","next":"END-RESOLVED","check":"Vestel BASIC RFID — badge utilisateur fonctionnel après réenregistrement"},
+        {"id":"failure","label":"Le badge ne fonctionne toujours pas","next":"END-TRANSFER","check":"Vestel BASIC RFID — lecteur réactif mais badge utilisateur toujours KO, transmission Service Technique"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RFID-SECOND-BADGE",
+      "type": "question",
+      "title": "Un autre badge RFID connu est-il disponible ?",
+      "body": "Si possible, utilisez un autre badge RFID connu afin de vérifier si le lecteur réagit à une autre carte.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"available","label":"Oui, tester un autre badge","next":"VESTEL-BASIC-RFID-SECOND-BADGE-RESULT","check":"Vestel BASIC RFID — second badge disponible pour test"},
+        {"id":"unavailable","label":"Non, aucun autre badge disponible","next":"END-TRANSFER","check":"Vestel BASIC RFID — aucune réaction avec la Master et aucun second badge disponible, transmission Service Technique"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-RFID-SECOND-BADGE-RESULT",
+      "type": "question",
+      "title": "Le lecteur réagit-il avec l’autre badge ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"reacts","label":"Oui, le lecteur réagit","next":"END-TRANSFER","check":"Vestel BASIC RFID — second badge reconnu mais carte Master sans réaction, transmission Service Technique"},
+        {"id":"no-reaction","label":"Non, aucune carte ne provoque de réaction","next":"END-TRANSFER","check":"Vestel BASIC RFID — aucune carte ne provoque de réaction, transmission Service Technique"}
+      ]
+    }
+  ]
+}
