@@ -1,0 +1,60 @@
+{
+  "nodes": {
+    "F-013": {
+      "answerOverrides": [
+        {
+          "id": "ma-charge-ne-se-lance-pas-pendant-mes-heur",
+          "next": "VESTEL-BASIC-OFFPEAK-VE-SCHEDULE"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "VESTEL-BASIC-OFFPEAK-VE-SCHEDULE",
+      "type": "question",
+      "title": "Une programmation est-elle active côté véhicule ?",
+      "body": "Rappel : une programmation côté véhicule n’est pas compatible avec le fonctionnement TIC de la borne. Les deux programmations peuvent entrer en conflit et empêcher le lancement de la charge en heures creuses.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"active","label":"Oui, une programmation est active","next":"VESTEL-BASIC-OFFPEAK-DISABLE-SCHEDULE","check":"Vestel BASIC heures creuses — programmation active côté véhicule"},
+        {"id":"none","label":"Non, aucune programmation côté véhicule","next":"VESTEL-BASIC-OFFPEAK-CONTRACT-CHANGE","check":"Vestel BASIC heures creuses — aucune programmation côté véhicule"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-OFFPEAK-DISABLE-SCHEDULE",
+      "type": "action",
+      "title": "Désactiver temporairement la programmation du véhicule",
+      "body": "Demandez au client de désactiver temporairement la programmation côté véhicule, puis de refaire un essai pendant les heures creuses.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"continue","label":"La programmation est désactivée, refaire l’essai","next":"VESTEL-BASIC-OFFPEAK-RETRY","check":"Vestel BASIC heures creuses — programmation véhicule désactivée temporairement"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-OFFPEAK-RETRY",
+      "type": "question",
+      "title": "La charge démarre-t-elle pendant les heures creuses ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"charging","label":"Oui, la charge démarre","next":"END-RESOLVED","check":"Vestel BASIC heures creuses — charge démarrée après désactivation de la programmation véhicule"},
+        {"id":"not-charging","label":"Non, la charge ne démarre toujours pas","next":"VESTEL-BASIC-OFFPEAK-CONTRACT-CHANGE","check":"Vestel BASIC heures creuses — défaut persistant après désactivation de la programmation véhicule"}
+      ]
+    },
+    {
+      "id": "VESTEL-BASIC-OFFPEAK-CONTRACT-CHANGE",
+      "type": "question",
+      "title": "Le client a-t-il récemment changé de contrat ou de puissance ?",
+      "body": "Rappel : les contrats spécifiques type TEMPO, Super Heures Creuses, Zen Flex, etc. peuvent poser des problèmes de lancement de la charge avec ce fonctionnement de la borne.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {"id":"yes","label":"Oui","next":"END-TRANSFER","check":"Vestel BASIC heures creuses — changement récent de contrat ou de puissance signalé, transmission Service Technique"},
+        {"id":"no","label":"Non","next":"END-TRANSFER","check":"Vestel BASIC heures creuses — aucun changement récent de contrat ou de puissance, transmission Service Technique"}
+      ]
+    }
+  ]
+}
