@@ -15,6 +15,7 @@ const DATA_FILES = {
   powerPolicy: 'power-policy.json',
   autocontrolPolicy: 'autocontrol-policy.json',
   vehiclePolicy: 'vehicle-policy.json',
+  vestelBasicPolicy: 'vestel-basic-policy.json',
   schneiderChargePolicy: 'schneider-charge-policy.json',
   schneiderWiserPolicy: 'schneider-wiser-policy.json',
   schneiderSmartchargePolicy: 'schneider-smartcharge-policy.json',
@@ -156,6 +157,7 @@ export async function loadData(baseUrl = '../data/') {
   data.nodes = applyPowerPolicy(data.nodes, data.powerPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.autocontrolPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.vehiclePolicy);
+  data.nodes = applySchneiderChargePolicy(data.nodes, data.vestelBasicPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderChargePolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderWiserPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderSmartchargePolicy);
