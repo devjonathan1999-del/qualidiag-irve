@@ -1,0 +1,59 @@
+{
+  "nodes": {
+    "F-012": {
+      "answerOverrides": [
+        {
+          "id": "application",
+          "next": "VESTEL-SMARTCHARGE-APP-ISSUE-TYPE"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "VESTEL-SMARTCHARGE-APP-ISSUE-TYPE",
+      "type": "question",
+      "title": "Quel est le problème rencontré avec l’application ?",
+      "body": "Distinguez une demande d’aide sur l’utilisation de Smartcharge d’un problème technique de l’application.",
+      "source": "Construction QualiDiag",
+      "validation": "a_valider",
+      "answers": [
+        {
+          "id": "usage",
+          "label": "J’ai besoin d’aide pour utiliser ou programmer Smartcharge",
+          "next": "F-022",
+          "check": "Vestel Smartcharge Application — aide à l’utilisation ou à la programmation"
+        },
+        {
+          "id": "technical",
+          "label": "L’application présente un problème technique",
+          "next": "VESTEL-SMARTCHARGE-APP-TECH-DESCRIPTION",
+          "check": "Vestel Smartcharge Application — problème technique signalé"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-APP-TECH-DESCRIPTION",
+      "type": "action",
+      "title": "Décrire le problème rencontré dans l’application",
+      "body": "Décrivez précisément le problème rencontré, le message affiché ou le comportement observé afin que le Service Technique dispose du contexte nécessaire.",
+      "source": "Construction QualiDiag",
+      "validation": "a_valider",
+      "input": {
+        "type": "textarea",
+        "key": "vestel.smartcharge.applicationIssue",
+        "label": "Problème rencontré dans l’application",
+        "placeholder": "Message affiché, action réalisée, comportement observé…",
+        "required": true
+      },
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Transmettre au Service Technique",
+          "next": "END-TRANSFER",
+          "check": "Vestel Smartcharge Application — description du problème collectée, transmission Service Technique"
+        }
+      ]
+    }
+  ]
+}
