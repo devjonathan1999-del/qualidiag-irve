@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { applySchneiderChargePolicy } from '../app/data.js';
 
+const WIFI_REQUIRED_ALERT = 'Test Wi-Fi obligatoire : le résultat doit impérativement être fourni au dossier. Réseau 2,4 GHz et signal ≥ -65 dBm.';
+
 async function loadJson(path) {
   return JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
 }
@@ -23,6 +25,21 @@ test('Schneider LED orange commence par la connexion Internet indiquée dans l�
   assert.equal(orange.answers.find(answer => answer.id === 'connected').next, 'SC-ORANGE-SUPERVISION');
   assert.equal(orange.answers.find(answer => answer.id === 'not-connected').next, 'SC-ORANGE-NOT-CONNECTED');
   assert.equal(orange.validation, 'valide');
+});
+
+test('chaque étape de test Wi-Fi affiche une alerte orange indiquant que le résultat doit être fourni obligatoirement', async () => {
+  const effective = await effectiveSchneiderNodes();
+  const wifiNodeIds = [
+    'SC-ORANGE-NOT-CONNECTED',
+    'SC-ORANGE-WIFI-WISER',
+    'SC-ORANGE-WIFI-SMARTCHARGE'
+  ];
+
+  for (const id of wifiNodeIds) {
+    const node = effective.find(item => item.id === id);
+    assert.ok(node, `Nœud Wi-Fi absent : ${id}`);
+    assert.equal(node.alert, WIFI_REQUIRED_ALERT);
+  }
 });
 
 test('si la borne n’est pas connectée, le test Wi-Fi est obligatoire et le pro doit réintervenir', async () => {
