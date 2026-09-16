@@ -59,8 +59,8 @@ test('Charge Pro LED bleue clignotante vérifie uniquement une programmation cô
 
   assert.equal(blue.title, 'Une programmation de charge est-elle active côté véhicule ?');
   assert.doesNotMatch(displayedText, /Smartcharge|Wiser|supervision|gestion de charge|puissance disponible/i);
-  assert.equal(blue.answers.find(answer => answer.id === 'scheduled').next, 'END-RESOLVED');
-  assert.equal(blue.answers.find(answer => answer.id === 'not-scheduled').next, 'END-TRANSFER');
+  assert.equal(blue.answers.find(answer => answer.id === 'waiting').next, 'END-RESOLVED');
+  assert.equal(blue.answers.find(answer => answer.id === 'not-waiting').next, 'END-TRANSFER');
   assert.equal(blue.validation, 'valide');
 });
 
