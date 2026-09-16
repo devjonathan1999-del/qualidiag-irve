@@ -167,7 +167,7 @@
       "id": "VESTEL-BASIC-VIOLET-REDUCE-LOAD",
       "type": "action",
       "title": "Réduire temporairement la consommation du logement",
-      "body": "Demandez au client de réduire temporairement les gros consommateurs du logement, puis de refaire un essai de charge.",
+      "body": "Le voyant violet fixe indique un manque de puissance disponible sur une phase, en monophasé comme en triphasé. Demandez au client de réduire temporairement les gros consommateurs du logement, puis de refaire un essai de charge.",
       "source": "Validation métier",
       "validation": "valide",
       "answers": [
