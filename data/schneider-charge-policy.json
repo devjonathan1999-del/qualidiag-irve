@@ -110,6 +110,7 @@
       "type": "question",
       "title": "LED rouge fixe",
       "body": "Demandez au client de débrancher puis de réinsérer le câble côté borne en appuyant fermement jusqu’en butée, puis de refaire un essai de charge.",
+      "alert": "Point de vigilance : bien appuyer fortement sur l’insertion du câble côté borne jusqu’en butée.",
       "source": "Forms actuel + validation métier",
       "validation": "valide",
       "answers": [
@@ -196,23 +197,59 @@
     },
     {
       "id": "SC-RED-RESTART",
-      "type": "question",
+      "type": "action",
       "title": "Redémarrer la borne",
-      "body": "Demandez au client de redémarrer la borne, puis de refaire un essai.",
+      "body": "Coupez l’alimentation de la borne au disjoncteur pendant 5 minutes, puis réarmez le disjoncteur.",
       "source": "Validation métier",
       "validation": "valide",
       "answers": [
         {
-          "id": "resolved",
-          "label": "Le défaut a disparu",
-          "next": "END-RESOLVED",
-          "check": "LED rouge fixe — défaut disparu après redémarrage"
+          "id": "continue",
+          "label": "La borne a été redémarrée",
+          "next": "SC-RED-AFTER-RESET",
+          "check": "Schneider Charge LED rouge fixe — redémarrage 5 minutes au disjoncteur effectué"
+        }
+      ]
+    },
+    {
+      "id": "SC-RED-AFTER-RESET",
+      "type": "question",
+      "title": "Après redémarrage, quel est l’état de la LED ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "normal",
+          "label": "La LED est revenue à un état normal",
+          "next": "SC-RED-CHARGE-TEST",
+          "check": "Schneider Charge LED rouge fixe — LED revenue normale après redémarrage"
         },
         {
-          "id": "still-red",
-          "label": "Le défaut revient",
+          "id": "red",
+          "label": "La LED est toujours rouge",
           "next": "SC-RED-CONTEXT",
-          "check": "LED rouge fixe — défaut persistant après redémarrage"
+          "check": "Schneider Charge LED rouge fixe — LED toujours rouge après redémarrage"
+        }
+      ]
+    },
+    {
+      "id": "SC-RED-CHARGE-TEST",
+      "type": "question",
+      "title": "L’essai de charge fonctionne-t-il ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "charge-ok",
+          "label": "Oui, la charge fonctionne",
+          "next": "END-RESOLVED",
+          "check": "Schneider Charge LED rouge fixe — essai de charge OK après redémarrage"
+        },
+        {
+          "id": "charge-ko",
+          "label": "Non, la charge ne fonctionne pas",
+          "next": "END-TRANSFER",
+          "check": "Schneider Charge LED rouge fixe — LED normale mais essai de charge KO, transmission Service Technique"
         }
       ]
     },
@@ -321,7 +358,7 @@
       "type": "question",
       "title": "La gestion dynamique explique-t-elle la charge faible ?",
       "body": "Vérifier si une consommation élevée du logement entraîne une réduction de puissance par la gestion dynamique. Si aucune cause évidente n’est identifiée, transmettre au Service Technique.",
-      "source": "Forms actuel + validation métier",
+      "source": "Validation métier",
       "validation": "valide",
       "answers": [
         {
