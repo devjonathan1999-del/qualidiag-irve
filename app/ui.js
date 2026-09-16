@@ -27,6 +27,11 @@ export function bodyMarkup(body = '') {
   return `<div class="body-panel"><p class="body-copy">${escapeHtml(body)}</p></div>`;
 }
 
+export function alertMarkup(alert = '') {
+  if (!alert) return '';
+  return `<aside class="alert-panel" role="note"><span class="alert-icon" aria-hidden="true">!</span><p>${escapeHtml(alert)}</p></aside>`;
+}
+
 export function answerButtons(answers = []) {
   return answers.map(answer => {
     const disabled = answer.disabled ? ' disabled aria-disabled="true"' : '';
@@ -85,6 +90,7 @@ export function render(root, viewModel, handlers = {}) {
         <h2>${escapeHtml(viewModel.title)}</h2>
       </div>
       ${bodyMarkup(viewModel.body)}
+      ${alertMarkup(viewModel.alert)}
       ${!isConclusion ? inputMarkup(viewModel.input) : ''}
       ${isConclusion ? `<textarea class="summary" readonly aria-label="Résumé Salesforce">${escapeHtml(viewModel.summary)}</textarea><p class="copy-status" data-copy-status aria-live="polite"></p>` : ''}
       ${controls}

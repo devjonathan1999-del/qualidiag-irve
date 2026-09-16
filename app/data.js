@@ -8,6 +8,8 @@ export const NODE_FILES = [
   'diagnostics/schneider-charge-pro.json'
 ];
 
+export const AGCP_PHOTO_REMINDER = 'Alerte : pour la prise en charge, joindre une photo lisible du disjoncteur de branchement, avec le calibre clairement visible.';
+
 const DATA_FILES = {
   brands: 'brands.json',
   models: 'models.json',
@@ -129,6 +131,31 @@ export function applySchneiderChargePolicy(nodes = [], policy = {}) {
   return [...output, ...additions];
 }
 
+function isAgcpCalibrationQuestion(node) {
+  const title = node?.title ?? '';
+  return /(AGCP|disjoncteur de branchement)/i.test(title) && /calibr/i.test(title);
+}
+
+export function applyAgcpPhotoAlert(nodes = []) {
+  return nodes.map(node => {
+    if (!isAgcpCalibrationQuestion(node)) return node;
+
+    return {
+      ...node,
+      alert: AGCP_PHOTO_REMINDER,
+      answers: Array.isArray(node.answers)
+        ? node.answers.map(answer => ({
+            ...answer,
+            set: {
+              ...(answer.set ?? {}),
+              'attachments.mainBreakerPhoto': AGCP_PHOTO_REMINDER
+            }
+          }))
+        : node.answers
+    };
+  });
+}
+
 export function applyFinalNotePolicy(nodes = []) {
   const conclusionIds = new Set(
     nodes.filter(node => node?.type === 'conclusion' && node.id).map(node => node.id)
@@ -195,6 +222,7 @@ export async function loadData(baseUrl = '../data/') {
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderSmartchargePolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderWifiAttachmentPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderChargeProPolicy);
+  data.nodes = applyAgcpPhotoAlert(data.nodes);
   data.nodes = applyFinalNotePolicy(data.nodes);
   return data;
 }

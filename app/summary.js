@@ -19,8 +19,8 @@ export function buildSalesforceSummary(session, conclusion = {}) {
     if (value) lines.push(`${label} : ${value}`);
   }
 
-  if (context['attachments.wifiTest']) {
-    lines.push('', context['attachments.wifiTest']);
+  for (const key of ['attachments.wifiTest', 'attachments.mainBreakerPhoto']) {
+    if (context[key]) lines.push('', context[key]);
   }
 
   const checks = Array.isArray(session?.checks) ? session.checks.filter(Boolean) : [];
