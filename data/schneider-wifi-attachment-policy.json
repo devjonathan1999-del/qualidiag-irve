@@ -1,6 +1,10 @@
 {
   "nodes": {
+    "SC-ORANGE-NOT-CONNECTED": {
+      "alert": "Test Wi-Fi obligatoire : le résultat doit impérativement être fourni au dossier. Réseau 2,4 GHz et signal ≥ -65 dBm."
+    },
     "SC-ORANGE-WIFI-WISER": {
+      "alert": "Test Wi-Fi obligatoire : le résultat doit impérativement être fourni au dossier. Réseau 2,4 GHz et signal ≥ -65 dBm.",
       "answers": [
         {
           "id": "conform",
@@ -17,6 +21,7 @@
       ]
     },
     "SC-ORANGE-WIFI-SMARTCHARGE": {
+      "alert": "Test Wi-Fi obligatoire : le résultat doit impérativement être fourni au dossier. Réseau 2,4 GHz et signal ≥ -65 dBm.",
       "answers": [
         {
           "id": "conform",
