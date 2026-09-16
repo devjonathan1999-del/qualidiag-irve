@@ -13,15 +13,19 @@ async function effectiveSchneiderNodes() {
   return applySchneiderChargePolicy(nodes, policy);
 }
 
-test('Schneider Charge faible commence par vérifier que le câble T2 est bien en 32 A', async () => {
+test('Schneider Charge faible commence par vérifier le câble T2 32 A avec photo obligatoire', async () => {
   const effective = await effectiveSchneiderNodes();
   const node = effective.find(item => item.id === 'F-087');
 
   assert.equal(node.title, 'Charge faible');
   assert.match(node.body, /câble T2.*32 A/i);
+  assert.match(node.alert, /photo.*câble.*marquage/i);
   assert.deepEqual(node.answers.map(answer => answer.id), ['cable-32a', 'cable-16a']);
   assert.equal(node.answers.find(answer => answer.id === 'cable-32a').next, 'SC-LOW-VEHICLE');
   assert.equal(node.answers.find(answer => answer.id === 'cable-16a').next, 'END-RESOLVED');
+  for (const answer of node.answers) {
+    assert.match(answer.set?.['attachments.t2CablePhoto'] ?? '', /photo.*câble T2/i);
+  }
   assert.equal(node.validation, 'valide');
 });
 
@@ -35,7 +39,7 @@ test('après un câble 32 A, QualiDiag vérifie une limitation de puissance côt
   assert.equal(node.validation, 'valide');
 });
 
-test('QualiDiag isole le cas 12 kVA avec Peak Controller réglé à 50 A', async () => {
+test('QualiDiag conserve le cas Schneider 12 kVA avec Peak Controller réglé à 50 A', async () => {
   const effective = await effectiveSchneiderNodes();
   const node = effective.find(item => item.id === 'SC-LOW-PEAK');
 
@@ -43,10 +47,10 @@ test('QualiDiag isole le cas 12 kVA avec Peak Controller réglé à 50 A', async
   assert.match(node.body, /Peak Controller/i);
   assert.match(node.body, /50 A/i);
   assert.equal(node.answers.find(answer => answer.id === 'peak-12kva-50a').next, 'SC-LOW-PEAK-MANEUVER');
-  assert.equal(node.answers.find(answer => answer.id === 'not-peak-case').next, 'SC-LOW-DPM');
+  assert.equal(node.answers.find(answer => answer.id === 'not-peak-case').next, 'SC-LOW-BEHAVIOR');
 });
 
-test('la procédure Peak Controller demande SET puis une rotation complète pour revenir à 50 A', async () => {
+test('la procédure Peak Controller demande SET puis une rotation complète avant de poursuivre si la charge reste faible', async () => {
   const effective = await effectiveSchneiderNodes();
   const node = effective.find(item => item.id === 'SC-LOW-PEAK-MANEUVER');
 
@@ -54,16 +58,34 @@ test('la procédure Peak Controller demande SET puis une rotation complète pour
   assert.match(node.body, /rotation complète/i);
   assert.match(node.body, /revenir à 50 A/i);
   assert.equal(node.answers.find(answer => answer.id === 'charge-normal').next, 'END-RESOLVED');
-  assert.equal(node.answers.find(answer => answer.id === 'still-low').next, 'SC-LOW-DPM');
+  assert.equal(node.answers.find(answer => answer.id === 'still-low').next, 'SC-LOW-BEHAVIOR');
 });
 
-test('en dernier recours, la gestion dynamique est vérifiée avant transmission au Service Technique', async () => {
+test('après câble véhicule et Peak Controller, QualiDiag distingue une puissance fixe ou variable', async () => {
   const effective = await effectiveSchneiderNodes();
-  const node = effective.find(item => item.id === 'SC-LOW-DPM');
+  const node = effective.find(item => item.id === 'SC-LOW-BEHAVIOR');
 
-  assert.match(node.body, /gestion dynamique/i);
-  assert.match(node.body, /consommation.*logement/i);
-  assert.equal(node.answers.find(answer => answer.id === 'dynamic-limitation').next, 'END-RESOLVED');
-  assert.equal(node.answers.find(answer => answer.id === 'no-obvious-cause').next, 'END-TRANSFER');
+  assert.match(node.title, /fixe.*variable/i);
+  assert.equal(node.answers.find(answer => answer.id === 'fixed').next, 'END-TRANSFER');
+  assert.equal(node.answers.find(answer => answer.id === 'variable').next, 'SC-LOW-REDUCE-LOAD');
+  assert.equal(node.validation, 'valide');
+});
+
+test('une puissance variable demande de réduire temporairement les gros consommateurs', async () => {
+  const effective = await effectiveSchneiderNodes();
+  const node = effective.find(item => item.id === 'SC-LOW-REDUCE-LOAD');
+
+  assert.match(node.body, /réduire temporairement.*gros consommateurs/i);
+  assert.equal(node.answers[0].next, 'SC-LOW-RESULT');
+  assert.equal(node.validation, 'valide');
+});
+
+test('le résultat du test de consommation résout la gestion dynamique ou transfère au Service Technique', async () => {
+  const effective = await effectiveSchneiderNodes();
+  const node = effective.find(item => item.id === 'SC-LOW-RESULT');
+
+  assert.match(node.title, /puissance.*remonte/i);
+  assert.equal(node.answers.find(answer => answer.id === 'power-rises').next, 'END-RESOLVED');
+  assert.equal(node.answers.find(answer => answer.id === 'still-low').next, 'END-TRANSFER');
   assert.equal(node.validation, 'valide');
 });
