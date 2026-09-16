@@ -11,6 +11,7 @@ export function buildSalesforceSummary(session, conclusion = {}) {
     ['Borne', context.brand],
     ['Modèle', context.model],
     ['Symptôme', context.symptom],
+    ['Description du problème', context['vestel.basic.otherDescription']],
     ['Informations complémentaires', context['final.additionalInfo']]
   ];
 
