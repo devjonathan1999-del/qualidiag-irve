@@ -8,16 +8,21 @@ async function loadJson(path) {
   return JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
 }
 
-test('Schneider Installation disjoncte reste sur un choix simple Linky ou AGCP', async () => {
+test('Schneider Installation disjoncte distingue Linky, disjoncteur de branchement et disjoncteur de la borne', async () => {
   const nodes = await loadJson('../data/diagnostics/schneider-charge.json');
   const policy = await loadJson('../data/schneider-charge-policy.json');
   const effective = applySchneiderChargePolicy(nodes, policy);
   const device = effective.find(node => node.id === 'F-084');
 
-  assert.equal(device.title, 'Quel appareil déclenche ?');
-  assert.deepEqual(device.answers.map(answer => answer.label), ['Compteur Linky', 'AGCP']);
-  assert.equal(device.answers[0].next, 'END-TRANSFER');
-  assert.equal(device.answers[1].next, 'F-085');
+  assert.equal(device.title, 'Quel appareil coupe ?');
+  assert.deepEqual(device.answers.map(answer => answer.label), [
+    'Compteur Linky',
+    'Disjoncteur de branchement',
+    'Disjoncteur de la borne'
+  ]);
+  assert.equal(device.answers.find(answer => answer.id === 'linky').next, 'END-TRANSFER');
+  assert.equal(device.answers.find(answer => answer.id === 'main-breaker').next, 'F-085');
+  assert.equal(device.answers.find(answer => answer.id === 'charger-breaker').next, 'SC-TRIP-CHARGER-REARM');
   assert.equal(device.validation, 'valide');
 });
 
@@ -61,4 +66,28 @@ test('le calibre attendu est affiché selon phase et abonnement déjà renseign�
     history: []
   }, {});
   assert.match(tri30.body, /50 A/);
+});
+
+test('le disjoncteur de la borne est réarmé une seule fois avant un essai de charge', async () => {
+  const nodes = await loadJson('../data/diagnostics/schneider-charge.json');
+  const policy = await loadJson('../data/schneider-charge-policy.json');
+  const effective = applySchneiderChargePolicy(nodes, policy);
+  const rearm = effective.find(node => node.id === 'SC-TRIP-CHARGER-REARM');
+  const retry = effective.find(node => node.id === 'SC-TRIP-CHARGER-TEST');
+
+  assert.match(rearm.body, /réarmer une seule fois/i);
+  assert.equal(rearm.answers.find(answer => answer.id === 'holds').next, 'SC-TRIP-CHARGER-TEST');
+  assert.equal(rearm.answers.find(answer => answer.id === 'drops-immediately').next, 'END-TRANSFER');
+  assert.equal(retry.answers.find(answer => answer.id === 'charge-ok').next, 'END-RESOLVED');
+  assert.equal(retry.answers.find(answer => answer.id === 'drops-during-charge').next, 'END-TRANSFER');
+});
+
+test('le parcours Schneider Installation disjoncte ne référence aucun nœud Vestel', async () => {
+  const nodes = await loadJson('../data/diagnostics/schneider-charge.json');
+  const policy = await loadJson('../data/schneider-charge-policy.json');
+  const effective = applySchneiderChargePolicy(nodes, policy);
+  const ids = ['F-084', 'F-085', 'SC-TRIP-CHARGER-REARM', 'SC-TRIP-CHARGER-TEST'];
+  const route = effective.filter(node => ids.includes(node.id));
+
+  assert.doesNotMatch(JSON.stringify(route), /VESTEL-/);
 });
