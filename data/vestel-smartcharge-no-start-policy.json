@@ -14,7 +14,7 @@
       "id": "VESTEL-SMARTCHARGE-NOSTART-VEHICLE-SCHEDULE",
       "type": "question",
       "title": "Une programmation est-elle active côté véhicule ?",
-      "body": "Rappel : lorsqu’une borne fonctionne avec la TIC, une programmation côté véhicule peut entrer en conflit avec la commande de charge et empêcher son lancement.",
+      "body": "Rappel : une programmation côté véhicule n’est pas compatible avec le fonctionnement TIC de la borne. Les deux programmations peuvent entrer en conflit et empêcher le lancement de la charge.",
       "source": "Validation métier",
       "validation": "valide",
       "answers": [
@@ -73,7 +73,7 @@
       "id": "VESTEL-SMARTCHARGE-NOSTART-CONTRACT-CHANGE",
       "type": "question",
       "title": "Le client a-t-il récemment changé de contrat ou de puissance ?",
-      "alert": "Rappel : certains contrats spécifiques peuvent poser des problèmes de lancement de la charge.",
+      "alert": "Rappel : les contrats spécifiques type TEMPO, Super Heures Creuses, Zen Flex, etc. peuvent poser des problèmes de lancement de la charge.",
       "source": "Validation métier",
       "validation": "valide",
       "answers": [
