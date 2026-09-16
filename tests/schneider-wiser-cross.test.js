@@ -28,11 +28,11 @@ test('Wiser croix rouge demande le message exact affiché avec trois choix méti
   assert.equal(wiser.validation, 'valide');
 });
 
-test('Schneider Charge non disponible renvoie vers le parcours connectivité déjà validé', async () => {
+test('Schneider Charge non disponible indique une borne hors ligne et va directement au test Wi-Fi obligatoire', async () => {
   const effective = await effectiveSchneiderNodes();
   const wiser = effective.find(node => node.id === 'F-096');
 
-  assert.equal(wiser.answers.find(answer => answer.id === 'not-available').next, 'F-091');
+  assert.equal(wiser.answers.find(answer => answer.id === 'not-available').next, 'SC-ORANGE-NOT-CONNECTED');
 });
 
 test('la demande de reconfiguration Wiser fait refaire l’association puis vérifie si la borne réapparaît', async () => {
