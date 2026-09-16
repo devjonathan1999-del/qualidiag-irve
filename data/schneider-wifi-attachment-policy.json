@@ -1,7 +1,18 @@
 {
   "nodes": {
     "SC-ORANGE-NOT-CONNECTED": {
-      "alert": "Test Wi-Fi obligatoire : le résultat doit impérativement être fourni au dossier. Réseau 2,4 GHz et signal ≥ -65 dBm."
+      "alert": "Test Wi-Fi obligatoire : le résultat doit impérativement être fourni au dossier. Réseau 2,4 GHz et signal ≥ -65 dBm.",
+      "answers": [
+        {
+          "id": "reintervention",
+          "label": "Demander le test Wi-Fi et faire réintervenir le professionnel",
+          "next": "END-REINTERVENTION",
+          "check": "LED orange clignotante — test Wi-Fi obligatoire et réintervention professionnel",
+          "set": {
+            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
+          }
+        }
+      ]
     },
     "SC-ORANGE-WIFI-WISER": {
       "alert": "Test Wi-Fi obligatoire : le résultat doit impérativement être fourni au dossier. Réseau 2,4 GHz et signal ≥ -65 dBm.",
@@ -9,14 +20,20 @@
         {
           "id": "conform",
           "label": "Oui, 2,4 GHz et signal ≥ -65 dBm",
-          "next": "SC-WIFI-ATTACH-WISER",
-          "check": "LED orange clignotante — Wi-Fi conforme, poursuite branche Wiser"
+          "next": "F-096",
+          "check": "LED orange clignotante — Wi-Fi conforme, poursuite branche Wiser",
+          "set": {
+            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
+          }
         },
         {
           "id": "not-conform",
           "label": "Non, test absent ou non conforme",
-          "next": "SC-WIFI-ATTACH-REINTERVENTION",
-          "check": "LED orange clignotante — Wi-Fi absent ou non conforme, réintervention professionnel"
+          "next": "END-REINTERVENTION",
+          "check": "LED orange clignotante — Wi-Fi absent ou non conforme, réintervention professionnel",
+          "set": {
+            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
+          }
         }
       ]
     },
@@ -26,72 +43,22 @@
         {
           "id": "conform",
           "label": "Oui, 2,4 GHz et signal ≥ -65 dBm",
-          "next": "SC-WIFI-ATTACH-SMARTCHARGE",
-          "check": "LED orange clignotante — Wi-Fi conforme, transmission Service Technique"
+          "next": "END-TRANSFER",
+          "check": "LED orange clignotante — Wi-Fi conforme, transmission Service Technique",
+          "set": {
+            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
+          }
         },
         {
           "id": "not-conform",
           "label": "Non, test absent ou non conforme",
-          "next": "SC-WIFI-ATTACH-REINTERVENTION",
-          "check": "LED orange clignotante — Wi-Fi absent ou non conforme, réintervention professionnel"
-        }
-      ]
-    }
-  },
-  "addNodes": [
-    {
-      "id": "SC-WIFI-ATTACH-WISER",
-      "type": "action",
-      "title": "⚠️ Test Wi-Fi à fournir",
-      "body": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)",
-      "source": "Validation métier",
-      "validation": "valide",
-      "answers": [
-        {
-          "id": "continue",
-          "label": "Continuer",
-          "next": "F-096",
-          "set": {
-            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
-          }
-        }
-      ]
-    },
-    {
-      "id": "SC-WIFI-ATTACH-SMARTCHARGE",
-      "type": "action",
-      "title": "⚠️ Test Wi-Fi à fournir",
-      "body": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)",
-      "source": "Validation métier",
-      "validation": "valide",
-      "answers": [
-        {
-          "id": "continue",
-          "label": "Continuer",
-          "next": "END-TRANSFER",
-          "set": {
-            "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
-          }
-        }
-      ]
-    },
-    {
-      "id": "SC-WIFI-ATTACH-REINTERVENTION",
-      "type": "action",
-      "title": "⚠️ Test Wi-Fi à fournir",
-      "body": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)",
-      "source": "Validation métier",
-      "validation": "valide",
-      "answers": [
-        {
-          "id": "continue",
-          "label": "Continuer",
           "next": "END-REINTERVENTION",
+          "check": "LED orange clignotante — Wi-Fi absent ou non conforme, réintervention professionnel",
           "set": {
             "attachments.wifiTest": "⚠️ Pièce à joindre : test Wi-Fi conforme (2,4 GHz / signal ≥ -65 dBm)"
           }
         }
       ]
     }
-  ]
+  }
 }
