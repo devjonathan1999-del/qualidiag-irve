@@ -15,8 +15,8 @@
       "type": "question",
       "title": "Quel est le problème rencontré avec l’application ?",
       "body": "Distinguez une demande d’aide sur l’utilisation de Smartcharge d’un problème technique de l’application.",
-      "source": "Construction QualiDiag",
-      "validation": "a_valider",
+      "source": "Validation métier",
+      "validation": "valide",
       "answers": [
         {
           "id": "usage",
@@ -37,8 +37,8 @@
       "type": "action",
       "title": "Décrire le problème rencontré dans l’application",
       "body": "Décrivez précisément le problème rencontré, le message affiché ou le comportement observé afin que le Service Technique dispose du contexte nécessaire.",
-      "source": "Construction QualiDiag",
-      "validation": "a_valider",
+      "source": "Validation métier",
+      "validation": "valide",
       "input": {
         "type": "textarea",
         "key": "vestel.smartcharge.applicationIssue",
