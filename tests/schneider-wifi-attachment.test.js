@@ -20,32 +20,34 @@ async function effectiveSchneiderNodes() {
   );
 }
 
-test('Wiser et Smartcharge passent par une alerte pièce à joindre après le test Wi-Fi', async () => {
+test('les résultats du test Wi-Fi poursuivent directement le parcours sans écran intermédiaire', async () => {
   const effective = await effectiveSchneiderNodes();
   const wiser = effective.find(node => node.id === 'SC-ORANGE-WIFI-WISER');
   const smartcharge = effective.find(node => node.id === 'SC-ORANGE-WIFI-SMARTCHARGE');
+  const notConnected = effective.find(node => node.id === 'SC-ORANGE-NOT-CONNECTED');
 
-  assert.equal(wiser.answers.find(answer => answer.id === 'conform').next, 'SC-WIFI-ATTACH-WISER');
-  assert.equal(wiser.answers.find(answer => answer.id === 'not-conform').next, 'SC-WIFI-ATTACH-REINTERVENTION');
-  assert.equal(smartcharge.answers.find(answer => answer.id === 'conform').next, 'SC-WIFI-ATTACH-SMARTCHARGE');
-  assert.equal(smartcharge.answers.find(answer => answer.id === 'not-conform').next, 'SC-WIFI-ATTACH-REINTERVENTION');
+  assert.equal(wiser.answers.find(answer => answer.id === 'conform').next, 'F-096');
+  assert.equal(wiser.answers.find(answer => answer.id === 'not-conform').next, 'END-REINTERVENTION');
+  assert.equal(smartcharge.answers.find(answer => answer.id === 'conform').next, 'END-TRANSFER');
+  assert.equal(smartcharge.answers.find(answer => answer.id === 'not-conform').next, 'END-REINTERVENTION');
+  assert.equal(notConnected.answers[0].next, 'END-REINTERVENTION');
+
+  assert.equal(effective.some(node => node.id.startsWith('SC-WIFI-ATTACH-')), false);
 });
 
-test('les alertes affichent le même rappel et reprennent ensuite le parcours prévu', async () => {
+test('chaque sortie du test Wi-Fi conserve le rappel de pièce à joindre pour Salesforce', async () => {
   const effective = await effectiveSchneiderNodes();
-  const expectedNext = {
-    'SC-WIFI-ATTACH-WISER': 'F-096',
-    'SC-WIFI-ATTACH-SMARTCHARGE': 'END-TRANSFER',
-    'SC-WIFI-ATTACH-REINTERVENTION': 'END-REINTERVENTION'
-  };
+  const wiser = effective.find(node => node.id === 'SC-ORANGE-WIFI-WISER');
+  const smartcharge = effective.find(node => node.id === 'SC-ORANGE-WIFI-SMARTCHARGE');
+  const notConnected = effective.find(node => node.id === 'SC-ORANGE-NOT-CONNECTED');
 
-  for (const [id, next] of Object.entries(expectedNext)) {
-    const node = effective.find(item => item.id === id);
-    assert.equal(node.title, '⚠️ Test Wi-Fi à fournir');
-    assert.equal(node.body, REMINDER);
-    assert.equal(node.answers[0].next, next);
-    assert.equal(node.answers[0].set['attachments.wifiTest'], REMINDER);
+  for (const answer of wiser.answers) {
+    assert.equal(answer.set['attachments.wifiTest'], REMINDER);
   }
+  for (const answer of smartcharge.answers) {
+    assert.equal(answer.set['attachments.wifiTest'], REMINDER);
+  }
+  assert.equal(notConnected.answers[0].set['attachments.wifiTest'], REMINDER);
 });
 
 test('le résumé Salesforce rappelle la pièce Wi-Fi à joindre', () => {
