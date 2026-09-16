@@ -1,0 +1,37 @@
+{
+  "nodes": {
+    "F-013": {
+      "answerOverrides": [
+        {
+          "id": "autre",
+          "next": "VESTEL-BASIC-OTHER-DESCRIPTION"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "VESTEL-BASIC-OTHER-DESCRIPTION",
+      "type": "action",
+      "title": "Décrire le problème rencontré",
+      "body": "Décrivez le problème rencontré afin que le Service Technique dispose du contexte nécessaire à la reprise du dossier.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "input": {
+        "type": "textarea",
+        "key": "vestel.basic.otherDescription",
+        "label": "Description du problème",
+        "placeholder": "Décrivez le comportement de la borne et le problème rencontré…",
+        "required": true
+      },
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Transmettre au Service Technique",
+          "next": "END-TRANSFER",
+          "check": "Vestel BASIC Autre — description du problème collectée, transmission Service Technique"
+        }
+      ]
+    }
+  ]
+}
