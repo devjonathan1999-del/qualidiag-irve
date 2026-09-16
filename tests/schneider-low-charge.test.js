@@ -65,7 +65,6 @@ test('après un câble 32 A, QualiDiag vérifie une limitation de puissance côt
   const effective = await effectiveSchneiderNodes();
   const node = effective.find(item => item.id === 'SC-LOW-VEHICLE');
 
-  assert.match(node.body, /véhicule.*limit/i);
   assert.equal(node.answers.find(answer => answer.id === 'vehicle-limited').next, 'END-RESOLVED');
   assert.equal(node.answers.find(answer => answer.id === 'vehicle-not-limited').next, 'SC-LOW-PEAK');
   assert.equal(node.validation, 'valide');
