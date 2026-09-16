@@ -10,8 +10,8 @@
         {
           "id": "not-available",
           "label": "Votre Schneider Charge n’est pas disponible",
-          "next": "F-091",
-          "check": "Wiser croix rouge — Schneider Charge non disponible, renvoi vers connectivité"
+          "next": "SC-ORANGE-NOT-CONNECTED",
+          "check": "Wiser croix rouge — Schneider Charge non disponible, borne considérée hors ligne et test Wi-Fi obligatoire"
         },
         {
           "id": "reconfigure",
