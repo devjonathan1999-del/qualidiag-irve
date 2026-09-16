@@ -39,7 +39,7 @@ test('le disjoncteur de branchement contrôle le calibre puis oriente selon le r
   assert.equal(calibration.bodyByContext.values['Monophasée|9 kVA'], 'Abonnement 9 kVA monophasé : calibre attendu 45 A.');
   assert.equal(calibration.bodyByContext.values['Triphasée|18 kVA'], 'Abonnement 18 kVA triphasé : calibre attendu 30 A.');
   assert.equal(calibration.answers.find(answer => answer.id === 'correct').next, 'FINAL-NOTE-END-TRANSFER');
-  assert.equal(calibration.answers.find(answer => answer.id === 'too-low').next, 'FINAL-NOTE-END-ENERGY-SUPPLIER');
+  assert.equal(calibration.answers.find(answer => answer.id === 'incorrect').next, 'FINAL-NOTE-END-ENERGY-SUPPLIER');
 });
 
 test('le disjoncteur de la borne est réarmé une seule fois puis un essai de charge décide de la suite', async () => {
