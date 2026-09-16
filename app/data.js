@@ -8,7 +8,7 @@ export const NODE_FILES = [
   'diagnostics/schneider-charge-pro.json'
 ];
 
-export const AGCP_PHOTO_REMINDER = 'Alerte : pour la prise en charge, joindre une photo lisible du disjoncteur de branchement, avec le calibre clairement visible.';
+export const AGCP_PHOTO_REMINDER = 'Pour la prise en charge, joindre une photo lisible du disjoncteur de branchement, avec le calibre clairement visible.';
 
 const DATA_FILES = {
   brands: 'brands.json',
