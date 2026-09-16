@@ -358,7 +358,7 @@
       "type": "question",
       "title": "La gestion dynamique explique-t-elle la charge faible ?",
       "body": "Vérifier si une consommation élevée du logement entraîne une réduction de puissance par la gestion dynamique. Si aucune cause évidente n’est identifiée, transmettre au Service Technique.",
-      "source": "Validation métier",
+      "source": "Forms actuel + validation métier",
       "validation": "valide",
       "answers": [
         {
