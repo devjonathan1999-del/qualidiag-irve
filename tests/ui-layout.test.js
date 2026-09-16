@@ -28,19 +28,30 @@ test('le texte d’aide est isolé dans un bloc lisible', () => {
   assert.match(html, /Triphasé/);
 });
 
-test('la feuille de style prévoit une grille de réponses responsive et conserve les retours à la ligne', async () => {
+test('la refonte privilégie une lecture verticale sur desktop comme sur mobile', async () => {
   const css = await readFile(new URL('../styles/app.css', import.meta.url), 'utf8');
 
-  assert.match(css, /\.answers\s*\{[^}]*grid-template-columns:\s*repeat\(auto-fit,\s*minmax\(/s);
+  assert.match(css, /\.shell\s*\{[^}]*width:\s*min\(760px,/s);
+  assert.match(css, /\.answers\s*\{[^}]*grid-template-columns:\s*1fr/s);
   assert.match(css, /\.body-copy\s*\{[^}]*white-space:\s*pre-line/s);
   assert.match(css, /\.context-breadcrumb/);
   assert.match(css, /\.body-panel/);
 });
 
-test('la carte principale est plus large mais visuellement plus compacte', async () => {
+test('la palette est sobre avec un bleu ardoise et un accent turquoise doux', async () => {
   const css = await readFile(new URL('../styles/app.css', import.meta.url), 'utf8');
 
-  assert.match(css, /\.shell\s*\{[^}]*width:\s*min\(1040px,/s);
-  assert.match(css, /\.card\s*\{[^}]*border-radius:\s*18px/s);
-  assert.match(css, /\.app-header\s*\{[^}]*margin-bottom:\s*14px/s);
+  assert.match(css, /--ink:\s*#17324f/i);
+  assert.match(css, /--accent:\s*#2aa7a1/i);
+  assert.match(css, /--surface:\s*#f8fafb/i);
+  assert.match(css, /button:focus-visible[^}]*outline:\s*3px solid var\(--accent\)/s);
+});
+
+test('l’accueil reprend les cartes verticales enrichies de la maquette validée', async () => {
+  const css = await readFile(new URL('../styles/app.css', import.meta.url), 'utf8');
+
+  assert.match(css, /#app:has\(\.answer\[data-answer="complaint"\]\)/);
+  assert.match(css, /Signalez un problème rencontré par un client et accédez au diagnostic adapté\./);
+  assert.match(css, /Consultez prochainement des ressources et informations générales\./);
+  assert.doesNotMatch(css, /DES DIAGNOSTICS FIABLES/i);
 });
