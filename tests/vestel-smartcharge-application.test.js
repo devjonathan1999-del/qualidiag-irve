@@ -37,6 +37,21 @@ test('Vestel Smartcharge Application distingue aide à l’utilisation et probl�
   assert.equal(issueType.answers.find(answer => answer.id === 'technical').next, 'VESTEL-SMARTCHARGE-APP-TECH-DESCRIPTION');
 });
 
+test('le parcours Application validé métier ne contient aucun lien SharePoint', async () => {
+  const data = await loadLocalData();
+  const ids = [
+    'VESTEL-SMARTCHARGE-APP-ISSUE-TYPE',
+    'F-022',
+    'VESTEL-SMARTCHARGE-APP-TECH-DESCRIPTION'
+  ];
+  const nodes = ids.map(id => data.nodes.find(node => node.id === id));
+
+  assert.ok(nodes.every(Boolean));
+  assert.equal(nodes[0].validation, 'valide');
+  assert.equal(nodes[2].validation, 'valide');
+  assert.doesNotMatch(JSON.stringify(nodes), /sharepoint/i);
+});
+
 test('un problème technique de l’application exige une description avant transfert', async () => {
   const data = await loadLocalData();
   const description = data.nodes.find(node => node.id === 'VESTEL-SMARTCHARGE-APP-TECH-DESCRIPTION');
