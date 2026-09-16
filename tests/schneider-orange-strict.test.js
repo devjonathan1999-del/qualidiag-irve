@@ -15,6 +15,12 @@ async function effectiveSchneiderNodes() {
   return applySchneiderChargePolicy(nodes, policy);
 }
 
+async function effectiveSchneiderNodesWithWifiPolicy() {
+  const nodes = await effectiveSchneiderNodes();
+  const wifiPolicy = await loadJson('../data/schneider-wifi-attachment-policy.json');
+  return applySchneiderChargePolicy(nodes, wifiPolicy);
+}
+
 test('Schneider LED orange commence par la connexion Internet indiquée dans l’autocontrôle', async () => {
   const effective = await effectiveSchneiderNodes();
   const orange = effective.find(node => node.id === 'F-091');
@@ -28,7 +34,7 @@ test('Schneider LED orange commence par la connexion Internet indiquée dans l�
 });
 
 test('chaque étape de test Wi-Fi affiche une alerte orange indiquant que le résultat doit être fourni obligatoirement', async () => {
-  const effective = await effectiveSchneiderNodes();
+  const effective = await effectiveSchneiderNodesWithWifiPolicy();
   const wifiNodeIds = [
     'SC-ORANGE-NOT-CONNECTED',
     'SC-ORANGE-WIFI-WISER',
