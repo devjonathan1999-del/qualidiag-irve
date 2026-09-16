@@ -19,7 +19,7 @@ export function buildSalesforceSummary(session, conclusion = {}) {
     if (value) lines.push(`${label} : ${value}`);
   }
 
-  for (const key of ['attachments.wifiTest', 'attachments.mainBreakerPhoto']) {
+  for (const key of ['attachments.wifiTest', 'attachments.mainBreakerPhoto', 'attachments.t2CablePhoto']) {
     if (context[key]) lines.push('', context[key]);
   }
 
