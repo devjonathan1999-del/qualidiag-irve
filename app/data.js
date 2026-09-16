@@ -27,6 +27,7 @@ const DATA_FILES = {
   vestelSmartchargeLowChargePolicy: 'vestel-smartcharge-low-charge-policy.json',
   vestelSmartchargeNoStartPolicy: 'vestel-smartcharge-no-start-policy.json',
   vestelSmartchargeApplicationPolicy: 'vestel-smartcharge-application-policy.json',
+  vestelSmartchargeOtherPolicy: 'vestel-smartcharge-other-policy.json',
   schneiderChargePolicy: 'schneider-charge-policy.json',
   schneiderWiserPolicy: 'schneider-wiser-policy.json',
   schneiderSmartchargePolicy: 'schneider-smartcharge-policy.json',
@@ -223,6 +224,7 @@ export async function loadData(baseUrl = '../data/') {
   data.nodes = applySchneiderChargePolicy(data.nodes, data.vestelSmartchargeLowChargePolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.vestelSmartchargeNoStartPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.vestelSmartchargeApplicationPolicy);
+  data.nodes = applySchneiderChargePolicy(data.nodes, data.vestelSmartchargeOtherPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderChargePolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderWiserPolicy);
   data.nodes = applySchneiderChargePolicy(data.nodes, data.schneiderSmartchargePolicy);
