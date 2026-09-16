@@ -1,10 +1,10 @@
-import { loadData, validateData } from './data.js?v=20260916-5';
-import { buildGraph, getNode, resolveAnswer, GraphError } from './engine.js?v=20260916-5';
-import { createSession, recordAnswer, goBack, restartSession } from './session.js?v=20260916-5';
-import { saveDraft, loadDraft, clearDraft } from './storage.js?v=20260916-5';
-import { buildSalesforceSummary } from './summary.js?v=20260916-5';
-import { toViewModel } from './presenter.js?v=20260916-5';
-import { render, renderDraftPrompt, renderFatalDataError, renderGraphError } from './ui.js?v=20260916-5';
+import { loadData, validateData } from './data.js?v=20260916-6';
+import { buildGraph, getNode, resolveAnswer, GraphError } from './engine.js?v=20260916-6';
+import { createSession, recordAnswer, goBack, restartSession } from './session.js?v=20260916-6';
+import { saveDraft, loadDraft, clearDraft } from './storage.js?v=20260916-6';
+import { buildSalesforceSummary } from './summary.js?v=20260916-6';
+import { toViewModel } from './presenter.js?v=20260916-6';
+import { render, renderDraftPrompt, renderFatalDataError, renderGraphError } from './ui.js?v=20260916-6';
 
 const root = document.querySelector('#app');
 let data;
