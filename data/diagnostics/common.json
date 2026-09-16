@@ -276,6 +276,24 @@
         }
       },
       {
+        "id": "schneider-charge",
+        "label": "Schneider Charge",
+        "next": "F-082",
+        "set": {
+          "brand": "Schneider Charge",
+          "model": "Schneider Charge"
+        }
+      },
+      {
+        "id": "schneider-charge-pro",
+        "label": "Schneider Charge Pro",
+        "next": "F-098",
+        "set": {
+          "brand": "Schneider Charge Pro",
+          "model": "Schneider Charge Pro"
+        }
+      },
+      {
         "id": "wallbox",
         "label": "Wallbox",
         "next": "F-027",
@@ -298,24 +316,6 @@
         "next": "F-070",
         "set": {
           "brand": "Hager"
-        }
-      },
-      {
-        "id": "schneider-charge",
-        "label": "Schneider Charge",
-        "next": "F-082",
-        "set": {
-          "brand": "Schneider Charge",
-          "model": "Schneider Charge"
-        }
-      },
-      {
-        "id": "schneider-charge-pro",
-        "label": "Schneider Charge Pro",
-        "next": "F-098",
-        "set": {
-          "brand": "Schneider Charge Pro",
-          "model": "Schneider Charge Pro"
         }
       }
     ]
