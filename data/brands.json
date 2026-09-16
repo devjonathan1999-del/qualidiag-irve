@@ -1,8 +1,8 @@
 [
   { "id": "vestel", "label": "Vestel IZI by EDF", "pilot": true },
+  { "id": "schneider-charge", "label": "Schneider Charge", "pilot": true },
+  { "id": "schneider-charge-pro", "label": "Schneider Charge Pro", "pilot": true },
   { "id": "wallbox", "label": "Wallbox", "pilot": true },
   { "id": "free2move", "label": "Free2Move", "pilot": true },
-  { "id": "hager", "label": "Hager", "pilot": true },
-  { "id": "schneider-charge", "label": "Schneider Charge", "pilot": true },
-  { "id": "schneider-charge-pro", "label": "Schneider Charge Pro", "pilot": true }
+  { "id": "hager", "label": "Hager", "pilot": true }
 ]
