@@ -1,0 +1,95 @@
+{
+  "nodes": {
+    "F-012": {
+      "answerOverrides": [
+        {
+          "id": "ma-charge-ne-se-lance-pas",
+          "next": "VESTEL-SMARTCHARGE-NOSTART-VEHICLE-SCHEDULE"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "VESTEL-SMARTCHARGE-NOSTART-VEHICLE-SCHEDULE",
+      "type": "question",
+      "title": "Une programmation est-elle active côté véhicule ?",
+      "body": "Rappel : une programmation côté véhicule n’est pas compatible avec le fonctionnement TIC de la borne. Les deux programmations peuvent entrer en conflit et empêcher le lancement de la charge.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "yes",
+          "label": "Oui, une programmation est active",
+          "next": "VESTEL-SMARTCHARGE-NOSTART-DISABLE-VEHICLE-SCHEDULE",
+          "check": "Vestel Smartcharge charge ne se lance pas — programmation active côté véhicule"
+        },
+        {
+          "id": "no",
+          "label": "Non, aucune programmation côté véhicule",
+          "next": "VESTEL-SMARTCHARGE-NOSTART-CONTRACT-CHANGE",
+          "check": "Vestel Smartcharge charge ne se lance pas — aucune programmation active côté véhicule"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-NOSTART-DISABLE-VEHICLE-SCHEDULE",
+      "type": "action",
+      "title": "Désactiver temporairement la programmation côté véhicule",
+      "body": "Demandez au client de désactiver temporairement la programmation côté véhicule, puis de refaire un essai de charge.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "continue",
+          "label": "La programmation est désactivée, refaire l’essai",
+          "next": "VESTEL-SMARTCHARGE-NOSTART-VEHICLE-SCHEDULE-RESULT",
+          "check": "Vestel Smartcharge charge ne se lance pas — essai réalisé sans programmation côté véhicule"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-NOSTART-VEHICLE-SCHEDULE-RESULT",
+      "type": "question",
+      "title": "La charge démarre-t-elle maintenant ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "starts",
+          "label": "Oui, la charge démarre",
+          "next": "END-RESOLVED",
+          "check": "Vestel Smartcharge charge ne se lance pas — résolu après désactivation de la programmation côté véhicule"
+        },
+        {
+          "id": "still-ko",
+          "label": "Non, la charge ne démarre toujours pas",
+          "next": "VESTEL-SMARTCHARGE-NOSTART-CONTRACT-CHANGE",
+          "check": "Vestel Smartcharge charge ne se lance pas — toujours KO sans programmation côté véhicule"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-NOSTART-CONTRACT-CHANGE",
+      "type": "question",
+      "title": "Le client a-t-il récemment changé de contrat ou de puissance ?",
+      "alert": "Rappel : les contrats spécifiques type TEMPO, Super Heures Creuses, Zen Flex, etc. peuvent poser des problèmes de lancement de la charge.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "yes",
+          "label": "Oui",
+          "next": "END-TRANSFER",
+          "check": "Vestel Smartcharge charge ne se lance pas — changement récent de contrat ou de puissance signalé, transmission Service Technique"
+        },
+        {
+          "id": "no",
+          "label": "Non",
+          "next": "END-TRANSFER",
+          "check": "Vestel Smartcharge charge ne se lance pas — aucun changement récent de contrat ou de puissance, transmission Service Technique"
+        }
+      ]
+    }
+  ]
+}
