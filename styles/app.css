@@ -176,6 +176,39 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   margin: 0;
 }
 
+.alert-panel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid #e3d3ad;
+  border-left: 4px solid #bd8b35;
+  border-radius: 14px;
+  background: #f5f0e6;
+  color: #68542d;
+}
+
+.alert-panel p {
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 650;
+}
+
+.alert-icon {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ead9b6;
+  color: #72551f;
+  font-size: .82rem;
+  font-weight: 850;
+}
+
 .field-group {
   display: grid;
   gap: 8px;
