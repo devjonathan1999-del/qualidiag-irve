@@ -5,7 +5,7 @@ import { loadData } from '../app/data.js';
 import { toViewModel } from '../app/presenter.js';
 import { buildSalesforceSummary } from '../app/summary.js';
 
-const REMINDER = 'Alerte : pour la prise en charge, joindre une photo lisible du disjoncteur de branchement, avec le calibre clairement visible.';
+const REMINDER = 'Pour la prise en charge, joindre une photo lisible du disjoncteur de branchement, avec le calibre clairement visible.';
 
 async function loadLocalData() {
   const originalFetch = globalThis.fetch;
