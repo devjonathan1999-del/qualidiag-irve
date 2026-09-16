@@ -41,6 +41,7 @@ export function toViewModel(node, session, data) {
     id: node.id,
     title: node.title ?? '',
     body: resolveBody(node, session?.context),
+    alert: node.alert ?? '',
     input: resolveInput(node, session?.context),
     canGoBack: (session?.history?.length ?? 0) > 0,
     context: contextView(session?.context)
