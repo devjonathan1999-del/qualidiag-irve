@@ -13,14 +13,45 @@ async function effectiveSchneiderNodes() {
   return applySchneiderChargePolicy(nodes, policy);
 }
 
+async function vestelBasicLowChargeNodes() {
+  const policy = await loadJson('../data/vestel-basic-low-charge-policy.json');
+  return policy.addNodes;
+}
+
+test('les écrans communs Schneider Charge faible reprennent exactement les textes affichés du Vestel', async () => {
+  const schneider = await effectiveSchneiderNodes();
+  const vestel = await vestelBasicLowChargeNodes();
+  const mappings = [
+    ['F-087', 'VESTEL-BASIC-LOW-CABLE'],
+    ['SC-LOW-VEHICLE', 'VESTEL-BASIC-LOW-VEHICLE'],
+    ['SC-LOW-BEHAVIOR', 'VESTEL-BASIC-LOW-BEHAVIOR'],
+    ['SC-LOW-REDUCE-LOAD', 'VESTEL-BASIC-LOW-REDUCE-LOAD'],
+    ['SC-LOW-RESULT', 'VESTEL-BASIC-LOW-RESULT']
+  ];
+
+  for (const [schneiderId, vestelId] of mappings) {
+    const schneiderNode = schneider.find(item => item.id === schneiderId);
+    const vestelNode = vestel.find(item => item.id === vestelId);
+
+    assert.equal(schneiderNode.title, vestelNode.title, `${schneiderId} title`);
+    assert.equal(schneiderNode.body ?? null, vestelNode.body ?? null, `${schneiderId} body`);
+    assert.equal(schneiderNode.alert ?? null, vestelNode.alert ?? null, `${schneiderId} alert`);
+    assert.deepEqual(
+      schneiderNode.answers.map(answer => answer.label),
+      vestelNode.answers.map(answer => answer.label),
+      `${schneiderId} answer labels`
+    );
+  }
+});
+
 test('Schneider Charge faible commence par vérifier le câble T2 32 A avec photo obligatoire', async () => {
   const effective = await effectiveSchneiderNodes();
   const node = effective.find(item => item.id === 'F-087');
 
-  assert.equal(node.title, 'Charge faible');
+  assert.match(node.title, /câble T2.*32 A/i);
   assert.match(node.body, /câble T2.*32 A/i);
   assert.match(node.alert, /photo.*câble.*marquage/i);
-  assert.deepEqual(node.answers.map(answer => answer.id), ['cable-32a', 'cable-16a']);
+  assert.deepEqual(node.answers.map(answer => answer.id).sort(), ['cable-16a', 'cable-32a']);
   assert.equal(node.answers.find(answer => answer.id === 'cable-32a').next, 'SC-LOW-VEHICLE');
   assert.equal(node.answers.find(answer => answer.id === 'cable-16a').next, 'END-RESOLVED');
   for (const answer of node.answers) {
