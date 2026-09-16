@@ -1,0 +1,52 @@
+{
+  "nodes": {
+    "F-012": {
+      "answerOverrides": [
+        {
+          "id": "led-violet-fixe",
+          "next": "VESTEL-SMARTCHARGE-VIOLET-PROGRAM"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "VESTEL-SMARTCHARGE-VIOLET-PROGRAM",
+      "type": "question",
+      "title": "Le client a-t-il un programme de charge configuré ?",
+      "body": "Le voyant violet fixe indique que la borne Smartcharge est en attente.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "yes",
+          "label": "Oui, un programme est configuré",
+          "next": "END-RESOLVED",
+          "check": "Vestel Smartcharge violet fixe — programme de charge configuré, fonctionnement normal"
+        },
+        {
+          "id": "no",
+          "label": "Non, aucun programme n'est configuré",
+          "next": "VESTEL-SMARTCHARGE-PROGRAM-GUIDE",
+          "check": "Vestel Smartcharge violet fixe — aucun programme de charge configuré"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-PROGRAM-GUIDE",
+      "type": "action",
+      "title": "Créer un programme de charge",
+      "body": "Dans l’application IZI by EDF, ouvrez l’onglet « Programmes » puis créez un programme de charge correspondant au besoin du client. Il est possible de créer plusieurs programmes selon les usages, par exemple semaine et week-end.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Le fonctionnement a été expliqué au client",
+          "next": "END-RESOLVED",
+          "check": "Vestel Smartcharge violet fixe — création d’un programme expliquée au client"
+        }
+      ]
+    }
+  ]
+}
