@@ -13,6 +13,7 @@ export function buildSalesforceSummary(session, conclusion = {}) {
     ['Symptôme', context.symptom],
     ['Description du problème', context['vestel.basic.otherDescription']],
     ['Problème application', context['vestel.smartcharge.applicationIssue']],
+    ['Description du problème Smartcharge', context['vestel.smartcharge.otherDescription']],
     ['Informations complémentaires', context['final.additionalInfo']]
   ];
 
