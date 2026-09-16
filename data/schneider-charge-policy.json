@@ -66,26 +66,26 @@
     },
     "F-087": {
       "type": "question",
-      "title": "Charge faible",
-      "body": "Le câble T2 utilisé est-il bien un câble 32 A ? Un câble 16 A limite automatiquement la puissance de charge.",
+      "title": "Le câble T2 est-il bien un câble 32 A ?",
+      "body": "Un câble T2 qui n’est pas prévu pour 32 A peut limiter la puissance de charge.",
       "alert": "Pour confirmer que le câble est bien en 32 A, demander au client une photo lisible du câble ou de son marquage.",
       "source": "Forms actuel + validation métier",
       "validation": "valide",
       "answers": [
         {
-          "id": "cable-32a",
-          "label": "Oui, câble T2 32 A confirmé",
-          "next": "SC-LOW-VEHICLE",
-          "check": "Charge faible — câble T2 32 A confirmé",
+          "id": "cable-16a",
+          "label": "Non",
+          "next": "END-RESOLVED",
+          "check": "Charge faible — câble T2 16 A identifié comme cause de limitation",
           "set": {
             "attachments.t2CablePhoto": "Photo du câble T2 / marquage 32 A demandée pour confirmation."
           }
         },
         {
-          "id": "cable-16a",
-          "label": "Non, câble 16 A",
-          "next": "END-RESOLVED",
-          "check": "Charge faible — câble T2 16 A identifié comme cause de limitation",
+          "id": "cable-32a",
+          "label": "Oui, 32 A confirmé",
+          "next": "SC-LOW-VEHICLE",
+          "check": "Charge faible — câble T2 32 A confirmé",
           "set": {
             "attachments.t2CablePhoto": "Photo du câble T2 / marquage 32 A demandée pour confirmation."
           }
@@ -297,20 +297,20 @@
     {
       "id": "SC-LOW-VEHICLE",
       "type": "question",
-      "title": "Le véhicule limite-t-il la puissance de charge ?",
-      "body": "Vérifier côté véhicule qu’aucune limitation de puissance de charge n’est paramétrée.",
+      "title": "Une limitation côté véhicule bride-t-elle la puissance ?",
+      "body": "Demandez au client de vérifier si une limitation de puissance est paramétrée côté véhicule.",
       "source": "Validation métier",
       "validation": "valide",
       "answers": [
         {
           "id": "vehicle-limited",
-          "label": "Oui, une limitation est paramétrée côté véhicule",
+          "label": "Il y avait une limitation",
           "next": "END-RESOLVED",
           "check": "Charge faible — limitation de puissance identifiée côté véhicule"
         },
         {
           "id": "vehicle-not-limited",
-          "label": "Non, aucune limitation côté véhicule",
+          "label": "Non, aucune limitation",
           "next": "SC-LOW-PEAK",
           "check": "Charge faible — aucune limitation côté véhicule"
         }
