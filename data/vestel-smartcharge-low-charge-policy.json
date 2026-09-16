@@ -1,0 +1,123 @@
+{
+  "nodes": {
+    "F-012": {
+      "answerOverrides": [
+        {
+          "id": "charge-faible",
+          "next": "VESTEL-SMARTCHARGE-LOW-CABLE"
+        }
+      ]
+    }
+  },
+  "addNodes": [
+    {
+      "id": "VESTEL-SMARTCHARGE-LOW-CABLE",
+      "type": "question",
+      "title": "Le câble T2 est-il bien un câble 32 A ?",
+      "body": "Un câble T2 qui n’est pas prévu pour 32 A peut limiter la puissance de charge.",
+      "alert": "Pour confirmer que le câble est bien en 32 A, demander au client une photo lisible du câble ou de son marquage.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "no",
+          "label": "Non",
+          "next": "END-RESOLVED",
+          "check": "Vestel Smartcharge charge faible — câble T2 non 32 A identifié comme cause de limitation",
+          "set": {
+            "attachments.t2CablePhoto": "Photo du câble T2 / marquage 32 A demandée pour confirmation."
+          }
+        },
+        {
+          "id": "yes",
+          "label": "Oui, 32 A confirmé",
+          "next": "VESTEL-SMARTCHARGE-LOW-VEHICLE",
+          "check": "Vestel Smartcharge charge faible — câble T2 32 A confirmé",
+          "set": {
+            "attachments.t2CablePhoto": "Photo du câble T2 / marquage 32 A demandée pour confirmation."
+          }
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-LOW-VEHICLE",
+      "type": "question",
+      "title": "Une limitation côté véhicule bride-t-elle la puissance ?",
+      "body": "Demandez au client de vérifier si une limitation de puissance est paramétrée côté véhicule.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "limited",
+          "label": "Il y avait une limitation",
+          "next": "END-RESOLVED",
+          "check": "Vestel Smartcharge charge faible — limitation de puissance identifiée côté véhicule"
+        },
+        {
+          "id": "not-limited",
+          "label": "Non, aucune limitation",
+          "next": "VESTEL-SMARTCHARGE-LOW-BEHAVIOR",
+          "check": "Vestel Smartcharge charge faible — aucune limitation côté véhicule"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-LOW-BEHAVIOR",
+      "type": "question",
+      "title": "La puissance de charge est-elle fixe ou variable ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "fixed",
+          "label": "Fixe (ex. : ne dépasse pas 4,5 kW)",
+          "next": "END-TRANSFER",
+          "check": "Vestel Smartcharge charge faible — puissance fixe après contrôle câble et véhicule, transmission Service Technique"
+        },
+        {
+          "id": "variable",
+          "label": "Variable (ex. : passe de 7,4 kW à 5 kW)",
+          "next": "VESTEL-SMARTCHARGE-LOW-REDUCE-LOAD",
+          "check": "Vestel Smartcharge charge faible — puissance variable"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-LOW-REDUCE-LOAD",
+      "type": "action",
+      "title": "Réduire temporairement la consommation du logement",
+      "body": "Demandez au client de réduire temporairement les gros consommateurs du logement, puis d’observer à nouveau la puissance de charge.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "continue",
+          "label": "Le test a été réalisé",
+          "next": "VESTEL-SMARTCHARGE-LOW-RESULT",
+          "check": "Vestel Smartcharge charge faible — test réalisé avec consommation du logement réduite"
+        }
+      ]
+    },
+    {
+      "id": "VESTEL-SMARTCHARGE-LOW-RESULT",
+      "type": "question",
+      "title": "La puissance de charge remonte-t-elle ?",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "power-rises",
+          "label": "Oui, la puissance remonte",
+          "next": "END-RESOLVED",
+          "check": "Vestel Smartcharge charge faible — variation expliquée par la gestion dynamique de puissance"
+        },
+        {
+          "id": "still-low",
+          "label": "Non, la puissance reste faible",
+          "next": "END-TRANSFER",
+          "check": "Vestel Smartcharge charge faible — puissance toujours faible après réduction de la consommation, transmission Service Technique"
+        }
+      ]
+    }
+  ]
+}
