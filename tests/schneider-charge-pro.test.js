@@ -48,14 +48,19 @@ test('Schneider Charge Pro expose les cinq symptômes validés et réutilise les
   assert.equal(nodes.find(node => node.id === 'F-087').validation, 'valide');
 });
 
-test('Charge Pro LED bleue clignotante distingue une mise en attente volontaire', async () => {
+test('Charge Pro LED bleue clignotante vérifie uniquement une programmation côté véhicule', async () => {
   const nodes = await effectiveNodes();
   const blue = nodes.find(node => node.id === 'SCP-BLUE-WAIT');
+  const displayedText = JSON.stringify({
+    title: blue.title,
+    body: blue.body,
+    labels: blue.answers.map(answer => answer.label)
+  });
 
-  assert.match(blue.title, /volontairement.*attente/i);
-  assert.match(blue.body, /véhicule|supervision|gestion de charge|puissance/i);
-  assert.equal(blue.answers.find(answer => answer.id === 'waiting').next, 'END-RESOLVED');
-  assert.equal(blue.answers.find(answer => answer.id === 'not-waiting').next, 'END-TRANSFER');
+  assert.equal(blue.title, 'Une programmation de charge est-elle active côté véhicule ?');
+  assert.doesNotMatch(displayedText, /Smartcharge|Wiser|supervision|gestion de charge|puissance disponible/i);
+  assert.equal(blue.answers.find(answer => answer.id === 'scheduled').next, 'END-RESOLVED');
+  assert.equal(blue.answers.find(answer => answer.id === 'not-scheduled').next, 'END-TRANSFER');
   assert.equal(blue.validation, 'valide');
 });
 
