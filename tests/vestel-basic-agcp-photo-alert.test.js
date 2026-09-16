@@ -26,14 +26,28 @@ async function loadLocalData() {
   }
 }
 
-test('Vestel BASIC demande une photo lisible sur le contrôle du disjoncteur de branchement', async () => {
-  const data = await loadLocalData();
-  const device = data.nodes.find(node => node.id === 'VESTEL-BASIC-TRIP-DEVICE');
-  const mainBreaker = device.answers.find(answer => answer.id === 'main-breaker');
-  const calibration = data.nodes.find(node => node.id === 'VESTEL-BASIC-TRIP-MAIN-CALIBRATION');
+function agcpCalibrationNodes(data) {
+  return data.nodes.filter(node => {
+    const title = node.title ?? '';
+    return /(AGCP|disjoncteur de branchement)/i.test(title) && /calibr/i.test(title);
+  });
+}
 
-  assert.equal(mainBreaker.set['attachments.mainBreakerPhoto'], REMINDER);
-  assert.equal(calibration.alert, REMINDER);
+test('chaque question de calibre AGCP ou disjoncteur de branchement exige la même photo lisible', async () => {
+  const data = await loadLocalData();
+  const nodes = agcpCalibrationNodes(data);
+
+  assert.ok(nodes.length >= 3, 'les contrôles BASIC, Smartcharge et Schneider doivent être couverts');
+  assert.ok(nodes.some(node => node.id === 'VESTEL-BASIC-TRIP-MAIN-CALIBRATION'));
+  assert.ok(nodes.some(node => node.id === 'VESTEL-SMARTCHARGE-TRIP-MAIN-CALIBRATION'));
+  assert.ok(nodes.some(node => node.id === 'F-085'));
+
+  for (const node of nodes) {
+    assert.equal(node.alert, REMINDER, `${node.id} doit afficher l’alerte photo`);
+    for (const answer of node.answers ?? []) {
+      assert.equal(answer.set?.['attachments.mainBreakerPhoto'], REMINDER, `${node.id}/${answer.id} doit conserver le rappel pour Salesforce`);
+    }
+  }
 });
 
 test('le presenter expose l’alerte et l’UI la rend dans un bloc dédié', async () => {
@@ -59,7 +73,7 @@ test('le presenter expose l’alerte et l’UI la rend dans un bloc dédié', as
   assert.match(css, /\.alert-panel\s*\{/);
 });
 
-test('le résumé Salesforce rappelle la photo uniquement lorsque la branche AGCP a été parcourue', () => {
+test('le résumé Salesforce rappelle la photo uniquement après un contrôle de calibre AGCP', () => {
   const withPhoto = buildSalesforceSummary({
     context: { 'attachments.mainBreakerPhoto': REMINDER },
     checks: []
