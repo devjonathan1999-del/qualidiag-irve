@@ -1,8 +1,8 @@
 {
   "nodes": {
     "F-084": {
-      "title": "Quel appareil déclenche ?",
-      "body": "Sélectionnez simplement l'appareil qui déclenche.",
+      "title": "Quel appareil coupe ?",
+      "body": "Sélectionnez l’appareil qui coupe pendant ou au lancement de la charge.",
       "source": "Forms actuel + validation métier",
       "validation": "valide",
       "answers": [
@@ -10,13 +10,19 @@
           "id": "linky",
           "label": "Compteur Linky",
           "next": "END-TRANSFER",
-          "check": "Installation disjoncte — Compteur Linky"
+          "check": "Schneider Charge installation disjoncte — compteur Linky coupe, transmission Service Technique"
         },
         {
-          "id": "agcp",
-          "label": "AGCP",
+          "id": "main-breaker",
+          "label": "Disjoncteur de branchement",
           "next": "F-085",
-          "check": "Installation disjoncte — AGCP"
+          "check": "Schneider Charge installation disjoncte — disjoncteur de branchement"
+        },
+        {
+          "id": "charger-breaker",
+          "label": "Disjoncteur de la borne",
+          "next": "SC-TRIP-CHARGER-REARM",
+          "check": "Schneider Charge installation disjoncte — disjoncteur de la borne"
         }
       ]
     },
@@ -25,7 +31,10 @@
       "source": "Forms actuel + validation métier",
       "validation": "valide",
       "bodyByContext": {
-        "keys": ["installation.phase", "installation.power"],
+        "keys": [
+          "installation.phase",
+          "installation.power"
+        ],
         "separator": "|",
         "values": {
           "Monophasée|6 kVA": "Abonnement 6 kVA monophasé : calibre attendu 30 A.",
@@ -141,6 +150,50 @@
     }
   },
   "addNodes": [
+    {
+      "id": "SC-TRIP-CHARGER-REARM",
+      "type": "action",
+      "title": "Réarmer le disjoncteur de la borne",
+      "body": "Demandez au client de réarmer une seule fois le disjoncteur de la borne.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "holds",
+          "label": "Le disjoncteur tient",
+          "next": "SC-TRIP-CHARGER-TEST",
+          "check": "Schneider Charge installation disjoncte — disjoncteur de la borne réarmé et maintenu"
+        },
+        {
+          "id": "drops-immediately",
+          "label": "Le disjoncteur retombe immédiatement / impossible à réarmer",
+          "next": "END-TRANSFER",
+          "check": "Schneider Charge installation disjoncte — disjoncteur de la borne retombe immédiatement ou impossible à réarmer, transmission Service Technique"
+        }
+      ]
+    },
+    {
+      "id": "SC-TRIP-CHARGER-TEST",
+      "type": "question",
+      "title": "Refaire un essai de charge",
+      "body": "Si le disjoncteur tient après réarmement, demandez au client de refaire un essai de charge.",
+      "source": "Validation métier",
+      "validation": "valide",
+      "answers": [
+        {
+          "id": "charge-ok",
+          "label": "La charge fonctionne normalement",
+          "next": "END-RESOLVED",
+          "check": "Schneider Charge installation disjoncte — essai de charge OK après réarmement du disjoncteur de la borne"
+        },
+        {
+          "id": "drops-during-charge",
+          "label": "Le disjoncteur retombe pendant la charge",
+          "next": "END-TRANSFER",
+          "check": "Schneider Charge installation disjoncte — disjoncteur de la borne retombe pendant la charge, transmission Service Technique"
+        }
+      ]
+    },
     {
       "id": "SC-RED-RESTART",
       "type": "question",
