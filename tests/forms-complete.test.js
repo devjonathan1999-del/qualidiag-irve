@@ -25,7 +25,7 @@ test('expose les six familles de bornes du Forms', async () => {
   const nodes = await loadNodes();
   const brand = nodes.find(node => node.id === 'Q-BRAND');
   assert.deepEqual(brand.answers.map(answer => answer.id), [
-    'vestel', 'wallbox', 'free2move', 'hager', 'schneider-charge', 'schneider-charge-pro'
+    'vestel', 'schneider-charge', 'schneider-charge-pro', 'wallbox', 'free2move', 'hager'
   ]);
 });
 
