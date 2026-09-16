@@ -21,6 +21,7 @@ async function vestelBasicLowChargeNodes() {
 test('les écrans communs Schneider Charge faible reprennent exactement les textes affichés du Vestel', async () => {
   const schneider = await effectiveSchneiderNodes();
   const vestel = await vestelBasicLowChargeNodes();
+  // Le Peak Controller reste volontairement un écran spécifique Schneider entre véhicule et fixe/variable.
   const mappings = [
     ['F-087', 'VESTEL-BASIC-LOW-CABLE'],
     ['SC-LOW-VEHICLE', 'VESTEL-BASIC-LOW-VEHICLE'],
