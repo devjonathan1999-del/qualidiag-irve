@@ -64,13 +64,13 @@
       "validation": "valide",
       "answers": [
         {
-          "id": "scheduled",
+          "id": "waiting",
           "label": "Oui, une programmation est active côté véhicule",
           "next": "END-RESOLVED",
           "check": "Charge Pro LED bleue clignotante — programmation véhicule identifiée, comportement expliqué"
         },
         {
-          "id": "not-scheduled",
+          "id": "not-waiting",
           "label": "Non, aucune programmation côté véhicule",
           "next": "END-TRANSFER",
           "check": "Charge Pro LED bleue clignotante — aucune programmation véhicule, transmission Service Technique"
