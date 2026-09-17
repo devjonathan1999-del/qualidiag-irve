@@ -58,22 +58,22 @@
     {
       "id": "SCP-BLUE-WAIT",
       "type": "question",
-      "title": "La charge est-elle volontairement mise en attente ?",
-      "body": "Exemples : programmation du véhicule, supervision, gestion de charge ou puissance disponible.",
+      "title": "Une programmation de charge est-elle active côté véhicule ?",
+      "body": "Vérifiez si une programmation de charge est active dans le véhicule.",
       "source": "Validation métier",
       "validation": "valide",
       "answers": [
         {
           "id": "waiting",
-          "label": "Oui, la mise en attente est expliquée",
+          "label": "Oui, une programmation est active côté véhicule",
           "next": "END-RESOLVED",
-          "check": "Charge Pro LED bleue clignotante — mise en attente volontaire identifiée"
+          "check": "Charge Pro LED bleue clignotante — programmation véhicule identifiée, comportement expliqué"
         },
         {
           "id": "not-waiting",
-          "label": "Non, aucune mise en attente connue",
+          "label": "Non, aucune programmation côté véhicule",
           "next": "END-TRANSFER",
-          "check": "Charge Pro LED bleue clignotante — aucune mise en attente identifiée, transmission Service Technique"
+          "check": "Charge Pro LED bleue clignotante — aucune programmation véhicule, transmission Service Technique"
         }
       ]
     },
